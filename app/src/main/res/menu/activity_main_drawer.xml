@@ -3,33 +3,30 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/map_hib"
+            android:icon="@android:drawable/ic_menu_mapmode"
+            android:title="@string/map_hibrid" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/map_nor"
+            android:icon="@android:drawable/ic_menu_mapmode"
+            android:title="@string/map_normal" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/map_sat"
+            android:icon="@android:drawable/ic_menu_mapmode"
+            android:title="@string/map_satelite" />
+
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/slide_text_middle">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
+                android:id="@+id/login"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="@string/login" />
+            <item
+                android:id="@+id/works"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/list_works" />
         </menu>
     </item>
 

@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">E-Build</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
+    <string name="map_normal">Normal</string>
+    <string name="map_satelite">Satelite</string>
+    <string name="map_hibrid">Híbrido</string>
+    <string name="slide_text_middle">Ações</string>
+    <string name="login">Login</string>
+    <string name="list_works">Listar Obras</string>
+    <string name="test_email">gabrielduartemomberg@gmail.com</string>
 </resources>
