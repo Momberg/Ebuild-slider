@@ -9,7 +9,8 @@
         <item
             android:id="@+id/map_nor"
             android:icon="@android:drawable/ic_menu_mapmode"
-            android:title="@string/map_normal" />
+            android:title="@string/map_normal"
+            android:checked="true"/>
         <item
             android:id="@+id/map_sat"
             android:icon="@android:drawable/ic_menu_mapmode"
