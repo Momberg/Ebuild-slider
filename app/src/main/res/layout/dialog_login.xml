@@ -14,7 +14,7 @@
         android:layout_gravity="center_horizontal"
         android:id="@+id/top"
         android:layout_weight="3.75"
-        android:background="#585656">
+        android:background="#757c75">
 
         <ImageView
             android:layout_width="match_parent"
