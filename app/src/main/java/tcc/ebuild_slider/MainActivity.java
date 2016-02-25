@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.map_sat) {
             mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         } else if (id == R.id.login) {
-
+            DialogCall dialog = new DialogCall();
+            dialog.callLoginDialog(this);
         } else if (id == R.id.works) {
 
         }
