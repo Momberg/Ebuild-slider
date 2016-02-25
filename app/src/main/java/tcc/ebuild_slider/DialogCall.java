@@ -2,6 +2,8 @@ package tcc.ebuild_slider;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -20,6 +22,7 @@ public class DialogCall{
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         myDialog.setContentView(R.layout.dialog_login);
         myDialog.setCanceledOnTouchOutside(false);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         user = (EditText) myDialog.findViewById(R.id.username);
         password = (EditText) myDialog.findViewById(R.id.password);
