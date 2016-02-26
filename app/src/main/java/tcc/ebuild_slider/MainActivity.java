@@ -81,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             DialogCall dialog = new DialogCall();
             dialog.callLoginDialog(this);
         } else if (id == R.id.works) {
-
+            DialogCall dialog = new DialogCall();
+            dialog.call_Dialog_Lista_Obras(this);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

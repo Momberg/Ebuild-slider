@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -36,10 +37,12 @@ public class DialogCall{
         Blog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (user.getText().toString().length() <= 0) {
+                if ((user.getText().toString().length() <= 0) && !(password.getText().toString().length() <= 0)) {
                     Toast.makeText(activity.getApplicationContext(), "Preencha o campo Usuário", Toast.LENGTH_LONG).show();
-                } else if (password.getText().toString().length() <= 0) {
+                } else if ((password.getText().toString().length() <= 0) && !(user.getText().toString().length() <= 0)){
                     Toast.makeText(activity.getApplicationContext(), "Preencha o campo password", Toast.LENGTH_LONG).show();
+                } else if ((user.getText().toString().length() <= 0) && (password.getText().toString().length() <= 0)) {
+                    Toast.makeText(activity.getApplicationContext(), "Preencha os campos acima", Toast.LENGTH_LONG).show();
                 }
 
 
@@ -65,5 +68,16 @@ public class DialogCall{
                 myDialog.dismiss();
             }
         });
+    }
+
+
+    public void call_Dialog_Lista_Obras(final Activity activity) {
+        final Dialog myDialog = new Dialog(activity);
+        myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        myDialog.setContentView(R.layout.dialog_list_work);
+        myDialog.setCanceledOnTouchOutside(false);
+        myDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.show();
     }
 }
