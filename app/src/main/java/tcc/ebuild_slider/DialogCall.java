@@ -2,6 +2,7 @@ package tcc.ebuild_slider;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
@@ -48,10 +49,10 @@ public class DialogCall{
 
                 if ((user.getText().toString().length() != 0) && (password.getText().toString().length() != 0)) {
                     if (((user.getText().toString().equals("admin")) && (password.getText().toString().equals("admin")))) {
-                        //Intent intent = new Intent(view.getContext(), MapsUserActivity.class);
-                        //startActivity(intent);
+                        Intent intent = new Intent(view.getContext(), LoggedActivity.class);
+                        activity.startActivity(intent);
                         myDialog.dismiss();
-                        //finish();
+                        //activity.finish();
                     }
 
                     if (!((user.getText().toString().equals("admin")) && (password.getText().toString().equals("admin")))) {
@@ -76,7 +77,6 @@ public class DialogCall{
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         myDialog.setContentView(R.layout.dialog_list_work);
         myDialog.setCanceledOnTouchOutside(false);
-        myDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
     }

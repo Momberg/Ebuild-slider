@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/map_hib"
+            android:icon="@android:drawable/ic_menu_mapmode"
+            android:title="@string/map_hibrid" />
+        <item
+            android:id="@+id/map_nor"
+            android:icon="@android:drawable/ic_menu_mapmode"
+            android:title="@string/map_normal"
+            android:checked="true"/>
+        <item
+            android:id="@+id/map_sat"
+            android:icon="@android:drawable/ic_menu_mapmode"
+            android:title="@string/map_satelite" />
+
+    </group>
+
+    <item android:title="@string/slide_text_middle">
+        <menu>
+            <item
+                android:id="@+id/logout"
+                android:icon="@android:drawable/ic_menu_close_clear_cancel"
+                android:title="@string/logout" />
+            <item
+                android:id="@+id/works"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/list_works" />
+        </menu>
+    </item>
+
+</menu>

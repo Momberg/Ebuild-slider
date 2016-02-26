@@ -12,4 +12,5 @@
     <string name="test_email">gabrielduartemomberg@gmail.com</string>
     <string name="title_activity_maps">Map</string>
     <string name="button_cancel">Cancelar</string>
+    <string name="logout">Logout</string>
 </resources>
