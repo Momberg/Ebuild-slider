@@ -13,4 +13,11 @@
     <string name="title_activity_maps">Map</string>
     <string name="button_cancel">Cancelar</string>
     <string name="logout">Logout</string>
+    <string name="nomeObra">Nome da Obra:</string>
+    <string name="interno">Interna</string>
+    <string name="externo">Externa</string>
+    <string name="salvar">Salvar</string>
+    <string name="data">Data de início da obra:</string>
+    <string name="texto_int_ext">Fases do Processo da Obra:</string>
+    <string name="cancelar">Cancelar</string>
 </resources>
