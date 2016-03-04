@@ -9,9 +9,17 @@ public class Obra {
 
     int id;
     double lat = 0, lng = 0;
-    String nome, TipoFase, fase;
-    Date data;
+    String nome= "", TipoFase, fase, data = "";
     boolean marker = false;
+
+    public void setObra(String nome, String data, String tipoFase, String fase, Double lat, Double lng){
+        setNome(nome);
+        setData(data);
+        setTipoFase(tipoFase);
+        setFase(fase);
+        setLat(lat);
+        setLng(lng);
+    }
 
     public int getID(){
         return id;
@@ -45,11 +53,11 @@ public class Obra {
         this.fase = fase;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.data = data;
     }
 

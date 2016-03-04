@@ -5,16 +5,19 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -40,11 +43,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public class LoggedActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback{
 
+    protected static final String TAG = "APP";
+
     private GoogleMap mMap;
-    FloatingActionButton fab_menu, fabAction1, fabAction2;
+    FloatingActionButton fab_menu, fabAction1, fabAction2, fabAction3;
     private boolean expanded = false;
-    private float offset1, offset2;
-    Obra obra= new Obra();
+    boolean preenchido = false, adicionado = false;
+    private float offset1, offset2, offset3;
+    double lat, lng;
+    String int_ext, item_selecionado, nome_obra, data_obra;
+    Obra obra = new Obra();
+    SharedPreferences cod_final;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +61,9 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         setContentView(R.layout.activity_logged);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        final ObrasDB db = new ObrasDB(this);
+        cod_final = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        preenchido = false;
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -60,6 +72,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         final ViewGroup fabContainer = (ViewGroup) findViewById(R.id.fab_container);
         fabAction1 = (FloatingActionButton) findViewById(R.id.fab1);
         fabAction2 = (FloatingActionButton) findViewById(R.id.fab2);
+        fabAction3 = (FloatingActionButton) findViewById(R.id.fab3);
         fab_menu = (FloatingActionButton) findViewById(R.id.fab_menu);
         fab_menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,18 +89,43 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         fabAction1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getBaseContext(), "Botão pesquisar apertado !", Toast.LENGTH_SHORT).show();
+                ObrasDB db = new ObrasDB(getApplicationContext());
+                db.limpa_db();
             }
         });
 
         fabAction2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(obra.getMarker()) {
+                if (obra.getMarker() && (!preenchido)) {
                     Intent intent = new Intent(view.getContext(), FormActivity.class);
                     startActivity(intent);
+                } else if ((!adicionado) && (preenchido)){
+                    Toast.makeText(getBaseContext(), "Informação ja adicionada", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getBaseContext(), "Adicione um marcador", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        fabAction3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                preenchido = cod_final.getBoolean("preenchido", preenchido);
+                if(preenchido) {
+                    nome_obra = cod_final.getString("nome", "");
+                    data_obra = cod_final.getString("data", "");
+                    int_ext = cod_final.getString("tipo", "");
+                    item_selecionado = cod_final.getString("fase", "");
+                    obra.setObra(nome_obra, data_obra, int_ext, item_selecionado, lat, lng);
+                    db.save(obra);
+                    preenchido = false;
+                    cod_final.edit().putBoolean("preenchido", preenchido).apply();
+                    fabAction3.setVisibility(View.INVISIBLE);
+                    obra.setMarker(false);
+                    adicionado = true;
+                } else {
+                    Toast.makeText(getBaseContext(),"Informações não foram adicionadas", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -100,6 +138,8 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 fabAction1.setTranslationY(offset1);
                 offset2 = fab_menu.getY() - fabAction2.getY();
                 fabAction2.setTranslationY(offset2);
+                offset3 = fab_menu.getY() - fabAction3.getY();
+                fabAction3.setTranslationY(offset3);
                 return true;
             }
         });
@@ -111,6 +151,17 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        preenchido = cod_final.getBoolean("preenchido", preenchido);
+        if(!preenchido){
+            fabAction3.setVisibility(View.INVISIBLE);
+        } else {
+            fabAction3.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -167,11 +218,8 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
             public void onMapLongClick(LatLng point) {
                 if(!obra.getMarker()) {
                     mMap.addMarker(new MarkerOptions().position(point).draggable(false).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                    double lat, lng;
                     lat = point.latitude;
                     lng = point.longitude;
-                    obra.setLat(lat);
-                    obra.setLng(lng);
                     obra.setMarker(true);
                 } else {
                     Toast.makeText(getBaseContext(), "Adicione apenas um marcador por vez", Toast.LENGTH_SHORT).show();
@@ -183,7 +231,8 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     private void collapseFab() {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(createCollapseAnimator(fabAction1, offset1),
-                createCollapseAnimator(fabAction2, offset2));
+                createCollapseAnimator(fabAction2, offset2),
+                createCollapseAnimator(fabAction3, offset3));
         animatorSet.start();
         animateFab();
     }
@@ -191,7 +240,8 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     private void expandFab() {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(createExpandAnimator(fabAction1, offset1),
-                createExpandAnimator(fabAction2, offset2));
+                createExpandAnimator(fabAction2, offset2),
+                createExpandAnimator(fabAction3, offset3));
         animatorSet.start();
         animateFab();
     }
