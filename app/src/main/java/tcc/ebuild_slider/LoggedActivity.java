@@ -4,6 +4,7 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -37,6 +38,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOError;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by momberg on 25/02/16.
@@ -100,6 +106,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 if (obra.getMarker() && (!preenchido)) {
                     Intent intent = new Intent(view.getContext(), FormActivity.class);
                     startActivity(intent);
+                    adicionado = false;
                 } else if ((!adicionado) && (preenchido)){
                     Toast.makeText(getBaseContext(), "Informação ja adicionada", Toast.LENGTH_SHORT).show();
                 } else {
@@ -154,6 +161,37 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     }
 
     @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        DrawnMarkers(mMap);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        mMap.setBuildingsEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            public void onMapLongClick(LatLng point) {
+                if(!obra.getMarker()) {
+                    mMap.addMarker(new MarkerOptions().position(point).draggable(false).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    lat = point.latitude;
+                    lng = point.longitude;
+                    obra.setMarker(true);
+                } else {
+                    Toast.makeText(getBaseContext(), "Adicione apenas um marcador por vez", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    @Override
     protected void onResume(){
         super.onResume();
         preenchido = cod_final.getBoolean("preenchido", preenchido);
@@ -198,36 +236,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         return true;
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mMap.setMyLocationEnabled(true);
-        mMap.setBuildingsEnabled(true);
-        mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            public void onMapLongClick(LatLng point) {
-                if(!obra.getMarker()) {
-                    mMap.addMarker(new MarkerOptions().position(point).draggable(false).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                    lat = point.latitude;
-                    lng = point.longitude;
-                    obra.setMarker(true);
-                } else {
-                    Toast.makeText(getBaseContext(), "Adicione apenas um marcador por vez", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
     private void collapseFab() {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(createCollapseAnimator(fabAction1, offset1),
@@ -262,6 +270,22 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         Drawable drawable = fab_menu.getDrawable();
         if (drawable instanceof Animatable) {
             ((Animatable) drawable).start();
+        }
+    }
+
+    public void DrawnMarkers(GoogleMap googlemap){
+        ObraService teste = new ObraService();
+        Double lat, lng;
+        try {
+            List<Obra> obras = teste.getObras(this);
+            for(Obra obra:obras){
+                lat = obra.lat;
+                lng = obra.lng;
+                LatLng point = new LatLng(lat, lng);
+                googlemap.addMarker(new MarkerOptions().position(point).draggable(false));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -1,5 +1,7 @@
 package tcc.ebuild_slider;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Date;
 
 /**
@@ -7,6 +9,7 @@ import java.util.Date;
  */
 public class Obra {
 
+    LatLng lat_lng;
     int id;
     double lat = 0, lng = 0;
     String nome= "", TipoFase, fase, data = "";

@@ -2,8 +2,12 @@ package tcc.ebuild_slider;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by momberg on 02/03/16.
@@ -53,8 +57,37 @@ public class ObrasDB extends SQLiteOpenHelper {
         }
     }
 
+    public List<Obra> findAll(){
+        SQLiteDatabase db = getWritableDatabase();
+        try{
+            Cursor c = db.query("obras", null, null, null, null, null, null);
+            return toList(c);
+        } finally {
+            db.close();
+        }
+
+    }
+
+    private List<Obra> toList(Cursor c) {
+        List<Obra> obras = new ArrayList<>();
+        if(c.moveToFirst()){
+            do{
+                Obra obra = new Obra();
+                obras.add(obra);
+                obra.id = c.getInt(c.getColumnIndex("_id"));
+                obra.nome = c.getString(c.getColumnIndex("nome"));
+                obra.data = c.getString(c.getColumnIndex("data"));
+                obra.TipoFase = c.getString(c.getColumnIndex("tipo_fase"));
+                obra.fase = c.getString(c.getColumnIndex("fase"));
+                obra.lat = c.getDouble(c.getColumnIndex("latitude"));
+                obra.lng = c.getDouble(c.getColumnIndex("longitude"));
+            } while (c.moveToNext());
+        }
+        return obras;
+    }
+
     public void limpa_db(){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("delete from obras;");
+        db.delete("obras", null, null);
     }
 }
