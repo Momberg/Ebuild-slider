@@ -22,9 +22,8 @@
                 android:divider="#7a7a7a"
                 android:textColor="@android:color/black"
                 android:dividerHeight="2dp"
-                android:choiceMode="singleChoice"
-                android:listSelector="#dc494949"
-                android:background="@drawable/listview" />
+                android:background="@drawable/listview"
+                android:listSelector="#dfdfdf" />
 
     </LinearLayout>
 

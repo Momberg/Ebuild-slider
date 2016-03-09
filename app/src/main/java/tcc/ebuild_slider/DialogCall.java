@@ -95,7 +95,6 @@ public class DialogCall{
         adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, info_lista);
         lista = (ListView) myDialog.findViewById(R.id.lista_edita_obra);
         lista.setAdapter(adapter);
-
     }
 
     public void set_list(final Activity activity){
