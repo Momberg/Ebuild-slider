@@ -52,7 +52,7 @@ public class FormActivity extends AppCompatActivity {
                     cod_final.edit().putBoolean("preenchido", preenchido).apply();
                     finish();
                 } else {
-                    Toast.makeText(getBaseContext(), "Preencha corretamente o formulário", Toast.LENGTH_SHORT).show();
+                    toast("Preencha corretamente o formulário");
                 }
 
             }
@@ -119,4 +119,7 @@ public class FormActivity extends AppCompatActivity {
         });
     }
 
+    private void toast(String text){
+        Toast.makeText(getBaseContext(), text, Toast.LENGTH_SHORT).show();
+    }
 }

@@ -108,9 +108,9 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     startActivity(intent);
                     adicionado = false;
                 } else if ((!adicionado) && (preenchido)){
-                    Toast.makeText(getBaseContext(), "Informação ja adicionada", Toast.LENGTH_SHORT).show();
+                    toast("Informação ja adicionada");
                 } else {
-                    Toast.makeText(getBaseContext(), "Adicione um marcador", Toast.LENGTH_SHORT).show();
+                    toast("Adicione um marcador");
                 }
             }
         });
@@ -132,7 +132,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     obra.setMarker(false);
                     adicionado = true;
                 } else {
-                    Toast.makeText(getBaseContext(),"Informações não foram adicionadas", Toast.LENGTH_SHORT).show();
+                    toast("Informações não foram adicionadas");
                 }
             }
         });
@@ -185,7 +185,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     lng = point.longitude;
                     obra.setMarker(true);
                 } else {
-                    Toast.makeText(getBaseContext(), "Adicione apenas um marcador por vez", Toast.LENGTH_SHORT).show();
+                    toast("Adicione apenas um marcador por vez");
                 }
             }
         });
@@ -274,18 +274,22 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     }
 
     public void DrawnMarkers(GoogleMap googlemap){
-        ObraService teste = new ObraService();
+        ObraService service = new ObraService();
         Double lat, lng;
         try {
-            List<Obra> obras = teste.getObras(this);
+            List<Obra> obras = service.getObras(this);
             for(Obra obra:obras){
-                lat = obra.lat;
-                lng = obra.lng;
+                lat = obra.getLat();
+                lng = obra.getLng();
                 LatLng point = new LatLng(lat, lng);
                 googlemap.addMarker(new MarkerOptions().position(point).draggable(false));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void toast(String text){
+        Toast.makeText(getBaseContext(), text, Toast.LENGTH_SHORT).show();
     }
 }

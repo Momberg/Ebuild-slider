@@ -8,9 +8,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by momberg on 25/02/16.
@@ -18,8 +24,14 @@ import android.widget.Toast;
 public class DialogCall{
     EditText user, password;
     Button Blog, Bcancel;
+    String temp_list;
+    Activity str;
+    ArrayAdapter<String> adapter;
+    ListView lista;
+    ArrayList<String> info_lista = new ArrayList<>();
 
     public void callLoginDialog(final Activity activity) {
+        str = activity;
         final Dialog myDialog = new Dialog(activity);
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         myDialog.setContentView(R.layout.dialog_login);
@@ -39,11 +51,11 @@ public class DialogCall{
             @Override
             public void onClick(View view) {
                 if ((user.getText().toString().length() <= 0) && !(password.getText().toString().length() <= 0)) {
-                    Toast.makeText(activity.getApplicationContext(), "Preencha o campo Usuário", Toast.LENGTH_LONG).show();
+                    toast("Preencha o campo Usuário");
                 } else if ((password.getText().toString().length() <= 0) && !(user.getText().toString().length() <= 0)){
-                    Toast.makeText(activity.getApplicationContext(), "Preencha o campo password", Toast.LENGTH_LONG).show();
+                    toast("Preencha o campo password");
                 } else if ((user.getText().toString().length() <= 0) && (password.getText().toString().length() <= 0)) {
-                    Toast.makeText(activity.getApplicationContext(), "Preencha os campos acima", Toast.LENGTH_LONG).show();
+                    toast("Preencha os campos acima");
                 }
 
 
@@ -56,7 +68,7 @@ public class DialogCall{
                     }
 
                     if (!((user.getText().toString().equals("admin")) && (password.getText().toString().equals("admin")))) {
-                        Toast.makeText(activity.getApplicationContext(), "Usuario inexistente ou senha incorreta", Toast.LENGTH_LONG).show();
+                        toast("Usuario inexistente ou senha incorreta");
                     }
                 }
 
@@ -79,5 +91,34 @@ public class DialogCall{
         myDialog.setCanceledOnTouchOutside(false);
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
+        set_list(activity);
+        adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, info_lista);
+        lista = (ListView) myDialog.findViewById(R.id.lista_edita_obra);
+        lista.setAdapter(adapter);
+
+    }
+
+    public void set_list(final Activity activity){
+        ObraService service = new ObraService();
+        try {
+            List<Obra> obras = service.getObras(activity);
+            for(Obra obra:obras){
+                lista_itens(obra.getNome(), obra.getData(), obra.getTipoFase(), obra.getFase());
+                info_lista.add(temp_list);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void toast(String text){
+        Toast.makeText(str.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    private void lista_itens(String nome, String data, String tipo, String fase){
+        temp_list = "Nome da obra: " + nome + "\n" +
+                    "Data: " + data + "\n" +
+                    "Fase:" + tipo + "\n" +
+                    "Fase do Processo: " + fase;
     }
 }
