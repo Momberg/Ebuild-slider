@@ -20,4 +20,13 @@
     <string name="data">Data de início da obra:</string>
     <string name="texto_int_ext">Fases do Processo da Obra:</string>
     <string name="cancelar">Cancelar</string>
+    <string name="rua">Rua:</string>
+    <string name="bairro">Bairro:</string>
+    <string name="cidade">Cidade:</string>
+    <string name="nulo">Nulo</string>
+    <string name="nome_adapter">Nome:</string>
+    <string name="data_adapter">Data:</string>
+    <string name="endereco_adapter">Endereço:</string>
+    <string name="tipo_fase_adapter">Fase:</string>
+    <string name="fase_adapter">Fase do processo:</string>
 </resources>

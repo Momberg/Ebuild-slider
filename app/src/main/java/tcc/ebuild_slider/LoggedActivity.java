@@ -57,7 +57,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     boolean preenchido = false, adicionado = false;
     private float offset1, offset2, offset3;
     double lat, lng;
-    String int_ext, item_selecionado, nome_obra, data_obra;
+    String int_ext, item_selecionado, nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
     Obra obra = new Obra();
     SharedPreferences cod_final;
 
@@ -122,9 +122,12 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 if(preenchido) {
                     nome_obra = cod_final.getString("nome", "");
                     data_obra = cod_final.getString("data", "");
+                    rua_obra = cod_final.getString("rua", "");
+                    bairro_obra = cod_final.getString("bairro", "");
+                    cidade_obra = cod_final.getString("cidade", "");
                     int_ext = cod_final.getString("tipo", "");
                     item_selecionado = cod_final.getString("fase", "");
-                    obra.setObra(nome_obra, data_obra, int_ext, item_selecionado, lat, lng);
+                    obra.setObraOnClick(nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra, int_ext, item_selecionado, lat, lng);
                     db.save(obra);
                     preenchido = false;
                     cod_final.edit().putBoolean("preenchido", preenchido).apply();
@@ -228,7 +231,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
             this.finish();
         } else if (id == R.id.works) {
             DialogCall dialog = new DialogCall();
-            dialog.call_Dialog_Lista_Obras(this);
+            dialog.call_Dialog_Lista_Obras_logged(this);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

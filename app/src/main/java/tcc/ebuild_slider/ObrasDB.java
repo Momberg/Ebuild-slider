@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class ObrasDB extends SQLiteOpenHelper {
 
-    private static final int VERSAO_BANCO = 1;
+    private static final int VERSAO_BANCO = 2;
     public static final String NOME_BANCO = "obras.sqlite";
 
     public ObrasDB(Context context) {
@@ -23,7 +23,7 @@ public class ObrasDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table if not exists obras (_id integer primary key autoincrement, nome text, data text, tipo_fase text, fase text, latitude double, longitude double);");
+        db.execSQL("create table if not exists obras (_id integer primary key autoincrement, nome text, data text, rua text, bairro text, cidade text, tipo_fase text, fase text, latitude double, longitude double);");
     }
 
     @Override
@@ -39,6 +39,9 @@ public class ObrasDB extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put("nome", obra.getNome());
             values.put("data", obra.getData());
+            values.put("rua", obra.getRua());
+            values.put("bairro", obra.getBairro());
+            values.put("cidade", obra.getCidade());
             values.put("tipo_fase", obra.getTipoFase());
             values.put("fase", obra.getFase());
             values.put("latitude", obra.getLat());
@@ -77,6 +80,9 @@ public class ObrasDB extends SQLiteOpenHelper {
                 obra.id = c.getInt(c.getColumnIndex("_id"));
                 obra.nome = c.getString(c.getColumnIndex("nome"));
                 obra.data = c.getString(c.getColumnIndex("data"));
+                obra.rua = c.getString(c.getColumnIndex("rua"));
+                obra.bairro = c.getString(c.getColumnIndex("bairro"));
+                obra.cidade = c.getString(c.getColumnIndex("cidade"));
                 obra.TipoFase = c.getString(c.getColumnIndex("tipo_fase"));
                 obra.fase = c.getString(c.getColumnIndex("fase"));
                 obra.lat = c.getDouble(c.getColumnIndex("latitude"));
@@ -84,6 +90,11 @@ public class ObrasDB extends SQLiteOpenHelper {
             } while (c.moveToNext());
         }
         return obras;
+    }
+
+    public void delete(int ID){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("obras","_id=" + ID, null);
     }
 
     public void limpa_db(){

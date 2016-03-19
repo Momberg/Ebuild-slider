@@ -3,11 +3,14 @@ package tcc.ebuild_slider;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.text.Html;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,11 +27,16 @@ import java.util.List;
 public class DialogCall{
     EditText user, password;
     Button Blog, Bcancel;
-    String temp_list;
+    String temp_list, item_selecionado;
+    int ID_Lista;
+    boolean selecionado = false;
     Activity str;
     ArrayAdapter<String> adapter;
     ListView lista;
     ArrayList<String> info_lista = new ArrayList<>();
+    Obra obra = new Obra();
+    List<Obra> obras;
+    ObraService service = new ObraService();
 
     public void callLoginDialog(final Activity activity) {
         str = activity;
@@ -84,25 +92,48 @@ public class DialogCall{
     }
 
 
-    public void call_Dialog_Lista_Obras(final Activity activity) {
+    public void call_Dialog_Lista_Obras_logged(final Activity activity){
+        str = activity;
         final Dialog myDialog = new Dialog(activity);
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        myDialog.setContentView(R.layout.dialog_list_work);
+        myDialog.setContentView(R.layout.dialog_list_work_logged);
         myDialog.setCanceledOnTouchOutside(false);
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
-        set_list(activity);
-        adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, info_lista);
+        //set_list(activity);
+        //adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, info_lista);
+        try {
+            obras = service.getObras(activity);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         lista = (ListView) myDialog.findViewById(R.id.lista_edita_obra);
-        lista.setAdapter(adapter);
+        lista.setAdapter(new ObraAdapter(activity, obras));
+        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                //item_selecionado = (String) arg0.getAdapter().getItem(arg2);
+                ID_Lista = arg2 + 1;
+               //toast(item_selecionado);
+                selecionado = true;
+            }
+        });
+
+        Button remove_obra = (Button) myDialog.findViewById(R.id.exclui);
+        remove_obra.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                ObrasDB db = new ObrasDB(str.getApplicationContext());
+                db.delete(ID_Lista);
+            }
+        });
     }
 
-    public void set_list(final Activity activity){
+    /*public void set_list(final Activity activity){
         ObraService service = new ObraService();
         try {
             List<Obra> obras = service.getObras(activity);
             for(Obra obra:obras){
-                lista_itens(obra.getNome(), obra.getData(), obra.getTipoFase(), obra.getFase());
+                lista_itens(obra.getNome(), obra.getData(), obra.getRua(), obra.getBairro(), obra.getCidade(), obra.getTipoFase(), obra.getFase());
                 info_lista.add(temp_list);
             }
         } catch (IOException e) {
@@ -110,14 +141,15 @@ public class DialogCall{
         }
     }
 
-    private void toast(String text){
-        Toast.makeText(str.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-    }
-
-    private void lista_itens(String nome, String data, String tipo, String fase){
+    private void lista_itens(String nome, String data, String rua, String bairro, String cidade, String tipo, String fase){
         temp_list = "Nome da obra: " + nome + "\n" +
                     "Data: " + data + "\n" +
+                    "Endereço: " + rua + ", " + bairro + " - " + cidade +"\n" +
                     "Fase:" + tipo + "\n" +
                     "Fase do Processo: " + fase;
+    }*/
+
+    private void toast(String text){
+        Toast.makeText(str.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
     }
 }

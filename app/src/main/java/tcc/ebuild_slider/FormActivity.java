@@ -15,9 +15,9 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class FormActivity extends AppCompatActivity {
-    EditText nome, data;
+    EditText nome, data, rua, bairro, cidade;
     Button salvar, cancelar;
-    String nome_obra, data_obra;
+    String nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
     boolean preenchido = false;
 
     RadioButton int_ext;
@@ -42,10 +42,13 @@ public class FormActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 salvar();
-                if(item == 1 && !nome_obra.equals("") && !data_obra.equals("")){
+                if(item == 1 && !nome_obra.equals("") && !data_obra.equals("") && !rua_obra.equals("") && !bairro_obra.equals("") && !cidade_obra.equals("")){
 
                     cod_final.edit().putString("nome", nome_obra).apply();
                     cod_final.edit().putString("data", data_obra).apply();
+                    cod_final.edit().putString("rua", rua_obra).apply();
+                    cod_final.edit().putString("bairro", bairro_obra).apply();
+                    cod_final.edit().putString("cidade", cidade_obra).apply();
                     cod_final.edit().putString("tipo", int_ext.getText().toString()).apply();
                     cod_final.edit().putString("fase", item_selecionado).apply();
                     preenchido = true;
@@ -73,6 +76,12 @@ public class FormActivity extends AppCompatActivity {
         nome_obra = nome.getText().toString();
         data = (EditText) findViewById(R.id.data);
         data_obra = data.getText().toString();
+        rua = (EditText) findViewById(R.id.rua);
+        rua_obra = rua.getText().toString();
+        bairro = (EditText) findViewById(R.id.bairro);
+        bairro_obra = bairro.getText().toString();
+        cidade = (EditText) findViewById(R.id.cidade);
+        cidade_obra = cidade.getText().toString();
     }
 
     public void fases(){
