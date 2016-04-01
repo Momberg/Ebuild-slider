@@ -29,4 +29,5 @@
     <string name="endereco_adapter">Endereço:</string>
     <string name="tipo_fase_adapter">Fase:</string>
     <string name="fase_adapter">Fase do processo:</string>
+    <string name="excluir">Excluir</string>
 </resources>

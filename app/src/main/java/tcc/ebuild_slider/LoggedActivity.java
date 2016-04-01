@@ -54,12 +54,12 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     private GoogleMap mMap;
     FloatingActionButton fab_menu, fabAction1, fabAction2, fabAction3;
     private boolean expanded = false;
-    boolean preenchido = false, adicionado = false;
+    boolean preenchido = false, adicionado = false, map_ready = false, list_back = false;
     private float offset1, offset2, offset3;
     double lat, lng;
     String int_ext, item_selecionado, nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
     Obra obra = new Obra();
-    SharedPreferences cod_final;
+    SharedPreferences cod_final, info_mapa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         setSupportActionBar(toolbar);
         final ObrasDB db = new ObrasDB(this);
         cod_final = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        info_mapa = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         preenchido = false;
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -166,7 +167,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        DrawnMarkers(mMap);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -182,7 +182,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             public void onMapLongClick(LatLng point) {
-                if(!obra.getMarker()) {
+                if (!obra.getMarker()) {
                     mMap.addMarker(new MarkerOptions().position(point).draggable(false).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     lat = point.latitude;
                     lng = point.longitude;
@@ -192,17 +192,45 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 }
             }
         });
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                DrawnMarkers(mMap);
+                toast("Marcadores carregados");
+                map_ready = true;
+            }
+        });
     }
 
     @Override
     protected void onResume(){
         super.onResume();
+        if(map_ready && list_back){
+            mMap.clear();
+            DrawnMarkers(mMap);
+            list_back = false;
+        }
         preenchido = cod_final.getBoolean("preenchido", preenchido);
         if(!preenchido){
             fabAction3.setVisibility(View.INVISIBLE);
         } else {
             fabAction3.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
     }
 
     @Override
@@ -230,8 +258,9 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         } else if (id == R.id.logout) {
             this.finish();
         } else if (id == R.id.works) {
-            DialogCall dialog = new DialogCall();
-            dialog.call_Dialog_Lista_Obras_logged(this);
+            list_back = true;
+            Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -276,7 +305,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
-    public void DrawnMarkers(GoogleMap googlemap){
+    public void DrawnMarkers(GoogleMap googleMap){
         ObraService service = new ObraService();
         Double lat, lng;
         try {
@@ -285,7 +314,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 lat = obra.getLat();
                 lng = obra.getLng();
                 LatLng point = new LatLng(lat, lng);
-                googlemap.addMarker(new MarkerOptions().position(point).draggable(false));
+                googleMap.addMarker(new MarkerOptions().position(point).draggable(false));
             }
         } catch (IOException e) {
             e.printStackTrace();

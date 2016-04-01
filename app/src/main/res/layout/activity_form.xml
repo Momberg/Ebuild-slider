@@ -42,6 +42,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
                     android:id="@+id/nome"/>
             </LinearLayout>
 
@@ -94,6 +95,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
                     android:id="@+id/rua"/>
             </LinearLayout>
 
@@ -118,6 +120,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
                     android:id="@+id/bairro"/>
             </LinearLayout>
 
@@ -142,6 +145,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
                     android:id="@+id/cidade"/>
             </LinearLayout>
 
@@ -198,7 +202,7 @@
         android:layout_marginTop="5dp">
 
         <ListView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:id="@+id/list_Int_Ext"
             android:divider="#FFFFFF"

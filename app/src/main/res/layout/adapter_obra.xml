@@ -6,21 +6,23 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:text="@string/nome_adapter"
             android:id="@+id/textView7"
             android:paddingLeft="2dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black"
             android:text="@string/nulo"
             android:id="@+id/t_nome"
             android:layout_marginLeft="3dp"
@@ -30,7 +32,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="2dp">
 
         <TextView
@@ -38,14 +40,16 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:text="@string/endereco_adapter"
             android:id="@+id/textView9"
             android:paddingLeft="2dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black"
             android:text="@string/nulo"
             android:id="@+id/t_endereco"
             android:layout_marginLeft="3dp"
@@ -55,7 +59,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="2dp">
 
         <TextView
@@ -63,14 +67,16 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:text="@string/data_adapter"
             android:id="@+id/textView11"
             android:paddingLeft="2dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black"
             android:text="@string/nulo"
             android:id="@+id/t_data"
             android:layout_marginLeft="3dp" />
@@ -79,7 +85,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="2dp">
 
         <TextView
@@ -87,14 +93,16 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:text="@string/tipo_fase_adapter"
             android:id="@+id/textView13"
             android:paddingLeft="2dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black"
             android:text="@string/nulo"
             android:id="@+id/t_tipo_fase"
             android:layout_marginLeft="3dp" />
@@ -103,7 +111,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="2dp">
 
         <TextView
@@ -111,14 +119,16 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:text="@string/fase_adapter"
             android:id="@+id/textView15"
             android:paddingLeft="2dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black"
             android:text="@string/nulo"
             android:id="@+id/t_fase"
             android:layout_marginLeft="3dp"

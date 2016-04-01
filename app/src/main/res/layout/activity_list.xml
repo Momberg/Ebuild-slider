@@ -9,25 +9,26 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/list">
 
 
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="300dp"
-                android:id="@+id/lista_edita_obra"
-                android:divider="#7a7a7a"
-                android:textColor="@android:color/black"
-                android:dividerHeight="2dp"
-                android:background="@drawable/listview"
-                android:listSelector="#dfdfdf" />
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lista_edita_obra"
+            android:divider="#7a7a7a"
+            android:textColor="@android:color/black"
+            android:dividerHeight="2dp"
+            android:listSelector="#dfdfdf"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <Button
                 style="?android:attr/buttonStyleSmall"
@@ -40,7 +41,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Excluir"
+                android:text="@string/excluir"
                 android:id="@+id/exclui" />
         </LinearLayout>
 
