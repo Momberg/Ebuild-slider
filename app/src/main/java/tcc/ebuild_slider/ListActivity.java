@@ -31,7 +31,7 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         try {
-            obras = service.getObras(this);
+            obras = service.getObrasAll(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,7 +54,7 @@ public class ListActivity extends AppCompatActivity {
                     ObrasDB db = new ObrasDB(getApplicationContext());
                     db.delete(ID_Lista);
                     try {
-                        obras = service.getObras(getApplicationContext());
+                        obras = service.getObrasAll(getApplicationContext());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

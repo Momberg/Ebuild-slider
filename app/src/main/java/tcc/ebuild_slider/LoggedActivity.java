@@ -29,6 +29,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -59,6 +60,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     double lat, lng;
     String int_ext, item_selecionado, nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
     Obra obra = new Obra();
+    ObraService service = new ObraService();
     SharedPreferences cod_final, info_mapa;
 
     @Override
@@ -200,6 +202,46 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 map_ready = true;
             }
         });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                final LatLng markerPosition = marker.getPosition();
+                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    @Override
+                    public View getInfoWindow(Marker marker) {
+                        return null;
+                    }
+
+                    @Override
+                    public View getInfoContents(Marker marker) {
+                        View v = getLayoutInflater().inflate(R.layout.info_marker, null);
+                        TextView nome_obra = (TextView) v.findViewById(R.id.nome_obra);
+                        TextView endereco_obra = (TextView) v.findViewById(R.id.endereco_obra);
+                        TextView data_obra = (TextView) v.findViewById(R.id.data_obra);
+                        TextView fase_obra = (TextView) v.findViewById(R.id.fase_obra);
+                        TextView item_fase_obra = (TextView) v.findViewById(R.id.faseitem_obra);
+                        List<Obra> obras;
+                        obras = service.getObrasLatLng(getApplicationContext(), markerPosition.latitude, markerPosition.longitude);
+                        if(obras.size() > 0){
+                            Obra o = obras.get(0);
+                            nome_obra.setText(o.getNome());
+                            String endereco;
+                            endereco = o.getRua() + ", " + o.getBairro() + " - " + o.getCidade();
+                            endereco_obra.setText(endereco);
+                            data_obra.setText(o.getData());
+                            fase_obra.setText(o.getTipoFase());
+                            item_fase_obra.setText(o.getFase());
+                        } else {
+                            toast("LatLng not found");
+                        }
+
+                        return v;
+                    }
+                });
+                return false;
+            }
+        });
     }
 
     @Override
@@ -306,10 +348,9 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     }
 
     public void DrawnMarkers(GoogleMap googleMap){
-        ObraService service = new ObraService();
         Double lat, lng;
         try {
-            List<Obra> obras = service.getObras(this);
+            List<Obra> obras = service.getObrasAll(this);
             for(Obra obra:obras){
                 lat = obra.getLat();
                 lng = obra.getLng();

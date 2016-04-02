@@ -6,12 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import java.util.List;
 
-/**
- * Created by momberg on 19/03/16.
- */
+
 public class ObraAdapter extends BaseAdapter {
 
     private Context context;

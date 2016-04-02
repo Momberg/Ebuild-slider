@@ -71,6 +71,16 @@ public class ObrasDB extends SQLiteOpenHelper {
 
     }
 
+    public List<Obra> findLatLng(double lat, double lng){
+        SQLiteDatabase db = getWritableDatabase();
+        try{
+            Cursor c = db.query("obras", null, "latitude = '" + lat + "' and longitude = '" + lng + "'", null, null, null, null);
+            return toList(c);
+        } finally {
+            db.close();
+        }
+    }
+
     private List<Obra> toList(Cursor c) {
         List<Obra> obras = new ArrayList<>();
         if(c.moveToFirst()){
