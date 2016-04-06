@@ -16,13 +16,15 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/nome_adapter"
             android:id="@+id/textView4"
-            android:layout_marginRight="3dp" />
+            android:layout_marginEnd="3dp"
+            android:textSize="12sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/nulo"
+            android:textSize="12sp"
             android:id="@+id/nome_obra" />
     </LinearLayout>
 
@@ -38,13 +40,15 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/endereco_adapter"
             android:id="@+id/textView14"
-            android:layout_marginRight="3dp" />
+            android:layout_marginEnd="3dp"
+            android:textSize="12sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/nulo"
+            android:textSize="12sp"
             android:id="@+id/endereco_obra" />
     </LinearLayout>
 
@@ -60,13 +64,15 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/data_adapter"
             android:id="@+id/textView11"
-            android:layout_marginRight="3dp" />
+            android:layout_marginEnd="3dp"
+            android:textSize="12sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/nulo"
+            android:textSize="12sp"
             android:id="@+id/data_obra" />
     </LinearLayout>
 
@@ -82,13 +88,15 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/tipo_fase_adapter"
             android:id="@+id/textView12"
-            android:layout_marginRight="3dp" />
+            android:layout_marginEnd="3dp"
+            android:textSize="12sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/nulo"
+            android:textSize="12sp"
             android:id="@+id/fase_obra" />
     </LinearLayout>
 
@@ -104,13 +112,15 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/fase_adapter"
             android:id="@+id/textView13"
-            android:layout_marginRight="3dp" />
+            android:layout_marginEnd="3dp"
+            android:textSize="12sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/nulo"
+            android:textSize="12sp"
             android:id="@+id/faseitem_obra" />
     </LinearLayout>
 

@@ -34,16 +34,24 @@ public class FormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form);
         interno = new String[] {"Verificar a necessidade","Elaboração dos estudos técnicos preliminares","Licença ambiental prévia","Elaboração do projeto básico","Elaboração do projeto executivo"};
         externo = new String[] {"Publicação do edital","Licitação","Contrataçao e designação do fiscal da obra","Pagamento seguindo o cronograma físico-financeiro e ordem cronológica","Recebimento da obra","Devolução de garantia","Registros finais"};
+        find_IDs();
         fases();
         preenchido = false;
         cod_final = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(!cod_final.getString("nome", "").equals("")){
+            nome.setText(cod_final.getString("nome", ""));
+            data.setText(cod_final.getString("data", ""));
+            rua.setText(cod_final.getString("rua", ""));
+            bairro.setText(cod_final.getString("bairro", ""));
+            cidade.setText(cod_final.getString("cidade", ""));
+        }
+
         salvar = (Button) findViewById(R.id.Bsalvar);
         salvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 salvar();
                 if(item == 1 && !nome_obra.equals("") && !data_obra.equals("") && !rua_obra.equals("") && !bairro_obra.equals("") && !cidade_obra.equals("")){
-
                     cod_final.edit().putString("nome", nome_obra).apply();
                     cod_final.edit().putString("data", data_obra).apply();
                     cod_final.edit().putString("rua", rua_obra).apply();
@@ -72,22 +80,15 @@ public class FormActivity extends AppCompatActivity {
     }
 
     public void salvar(){
-        nome = (EditText) findViewById(R.id.nome);
         nome_obra = nome.getText().toString();
-        data = (EditText) findViewById(R.id.data);
         data_obra = data.getText().toString();
-        rua = (EditText) findViewById(R.id.rua);
         rua_obra = rua.getText().toString();
-        bairro = (EditText) findViewById(R.id.bairro);
         bairro_obra = bairro.getText().toString();
-        cidade = (EditText) findViewById(R.id.cidade);
         cidade_obra = cidade.getText().toString();
     }
 
     public void fases(){
-
         GrupoRadio = (RadioGroup) findViewById(R.id.radio_Ext_Int);
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_list_item_1, interno);
         lista = (ListView) findViewById(R.id.list_Int_Ext);
         lista.setAdapter(adapter);
@@ -99,7 +100,6 @@ public class FormActivity extends AppCompatActivity {
                 item = 1;
             }
         });
-
 
         GrupoRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -130,5 +130,13 @@ public class FormActivity extends AppCompatActivity {
 
     private void toast(String text){
         Toast.makeText(getBaseContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    private void find_IDs(){
+        nome = (EditText) findViewById(R.id.nome);
+        data = (EditText) findViewById(R.id.data);
+        rua = (EditText) findViewById(R.id.rua);
+        bairro = (EditText) findViewById(R.id.bairro);
+        cidade = (EditText) findViewById(R.id.cidade);
     }
 }

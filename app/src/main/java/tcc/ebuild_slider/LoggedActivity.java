@@ -4,7 +4,6 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,12 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -31,7 +25,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -39,18 +32,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.io.IOError;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by momberg on 25/02/16.
- */
 public class LoggedActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback{
-
-    protected static final String TAG = "APP";
 
     private GoogleMap mMap;
     FloatingActionButton fab_menu, fabAction1, fabAction2, fabAction3;
@@ -61,7 +46,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     String int_ext, item_selecionado, nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
     Obra obra = new Obra();
     ObraService service = new ObraService();
-    SharedPreferences cod_final, info_mapa;
+    SharedPreferences cod_final;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +56,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         setSupportActionBar(toolbar);
         final ObrasDB db = new ObrasDB(this);
         cod_final = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        info_mapa = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         preenchido = false;
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -98,8 +82,9 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         fabAction1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ObrasDB db = new ObrasDB(getApplicationContext());
-                db.limpa_db();
+                mMap.clear();
+                obra.setMarker(false);
+                DrawnMarkers(mMap);
             }
         });
 
@@ -112,6 +97,9 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     adicionado = false;
                 } else if ((!adicionado) && (preenchido)){
                     toast("Informação ja adicionada");
+                    Intent intent = new Intent(view.getContext(), FormActivity.class);
+                    startActivity(intent);
+                    adicionado = false;
                 } else {
                     toast("Adicione um marcador");
                 }
@@ -132,8 +120,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     item_selecionado = cod_final.getString("fase", "");
                     obra.setObraOnClick(nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra, int_ext, item_selecionado, lat, lng);
                     db.save(obra);
-                    preenchido = false;
-                    cod_final.edit().putBoolean("preenchido", preenchido).apply();
+                    limpa_var();
                     fabAction3.setVisibility(View.INVISIBLE);
                     obra.setMarker(false);
                     adicionado = true;
@@ -212,7 +199,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     public View getInfoWindow(Marker marker) {
                         return null;
                     }
-
                     @Override
                     public View getInfoContents(Marker marker) {
                         View v = getLayoutInflater().inflate(R.layout.info_marker, null);
@@ -235,7 +221,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                         } else {
                             toast("LatLng not found");
                         }
-
                         return v;
                     }
                 });
@@ -247,7 +232,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     @Override
     protected void onResume(){
         super.onResume();
-        if(map_ready && list_back){
+        if(map_ready && list_back && adicionado){
             mMap.clear();
             DrawnMarkers(mMap);
             list_back = false;
@@ -290,7 +275,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.map_hib) {
             mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         } else if (id == R.id.map_nor) {
@@ -304,7 +288,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
             Intent intent = new Intent(getApplicationContext(), ListActivity.class);
             startActivity(intent);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -364,5 +347,15 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
 
     private void toast(String text){
         Toast.makeText(getBaseContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    private void limpa_var(){
+        cod_final.edit().putString("nome", "").apply();
+        cod_final.edit().putString("data", "").apply();
+        cod_final.edit().putString("rua", "").apply();
+        cod_final.edit().putString("bairro", "").apply();
+        cod_final.edit().putString("cidade", "").apply();
+        preenchido = false;
+        cod_final.edit().putBoolean("preenchido", preenchido).apply();
     }
 }

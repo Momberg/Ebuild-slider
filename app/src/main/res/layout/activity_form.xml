@@ -151,7 +151,7 @@
 
         </LinearLayout>
 
-        </ScrollView>
+    </ScrollView>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -168,7 +168,7 @@
             android:text="@string/texto_int_ext"
             android:id="@+id/textView2"
             android:paddingTop="17dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginEnd="20dp" />
 
         <RadioGroup
             android:id="@+id/radio_Ext_Int"
