@@ -33,7 +33,7 @@
         app:fabSize="mini"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:src="@android:drawable/stat_notify_sync_noanim"
         android:layout_above="@+id/fab_menu"
         android:layout_alignStart="@+id/fab_menu"
         android:layout_marginStart="9dp"

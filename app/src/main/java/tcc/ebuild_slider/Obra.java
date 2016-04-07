@@ -1,10 +1,6 @@
 package tcc.ebuild_slider;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class Obra {
-
-
     int id;
     double lat = 0, lng = 0;
     String nome= "";
@@ -35,6 +31,16 @@ public class Obra {
         setFase(fase);
         setLat(lat);
         setLng(lng);
+    }
+
+    public void edit_obra(String nome, String data, String rua, String bairro, String cidade, String tipoFase, String fase){
+        setNome(nome);
+        setData(data);
+        setRua(rua);
+        setBairro(bairro);
+        setCidade(cidade);
+        setTipoFase(tipoFase);
+        setFase(fase);
     }
 
     public int getID(){

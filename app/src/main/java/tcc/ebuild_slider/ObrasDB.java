@@ -5,13 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by momberg on 02/03/16.
- */
 public class ObrasDB extends SQLiteOpenHelper {
 
     private static final int VERSAO_BANCO = 2;

@@ -1,19 +1,12 @@
 package tcc.ebuild_slider;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -63,6 +56,14 @@ public class ListActivity extends AppCompatActivity {
                 } else {
                     toast("Selecione alguma obra");
                 }
+            }
+        });
+
+        Button edita_obra = (Button) findViewById(R.id.edita);
+        edita_obra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toast("Editar");
             }
         });
     }

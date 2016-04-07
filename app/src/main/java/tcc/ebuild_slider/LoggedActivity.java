@@ -99,7 +99,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     toast("Informação ja adicionada");
                     Intent intent = new Intent(view.getContext(), FormActivity.class);
                     startActivity(intent);
-                    adicionado = false;
                 } else {
                     toast("Adicione um marcador");
                 }
@@ -193,7 +192,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                final LatLng markerPosition = marker.getPosition();
                 mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                     @Override
                     public View getInfoWindow(Marker marker) {
@@ -207,6 +205,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                         TextView data_obra = (TextView) v.findViewById(R.id.data_obra);
                         TextView fase_obra = (TextView) v.findViewById(R.id.fase_obra);
                         TextView item_fase_obra = (TextView) v.findViewById(R.id.faseitem_obra);
+                        LatLng markerPosition = marker.getPosition();
                         List<Obra> obras;
                         obras = service.getObrasLatLng(getApplicationContext(), markerPosition.latitude, markerPosition.longitude);
                         if(obras.size() > 0){
