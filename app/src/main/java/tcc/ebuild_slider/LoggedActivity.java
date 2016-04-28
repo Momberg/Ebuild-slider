@@ -82,9 +82,13 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         fabAction1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mMap.clear();
-                obra.setMarker(false);
-                DrawnMarkers(mMap);
+                if(!obra.marker){
+                    mMap.clear();
+                    obra.setMarker(false);
+                    DrawnMarkers(mMap);
+                } else {
+                    toast("Não é possivel fazer update, fazer a inserção da obra adicionada");
+                }
             }
         });
 
@@ -96,7 +100,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     startActivity(intent);
                     adicionado = false;
                 } else if ((!adicionado) && (preenchido)){
-                    toast("Informação ja adicionada");
                     Intent intent = new Intent(view.getContext(), FormActivity.class);
                     startActivity(intent);
                 } else {
@@ -231,7 +234,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     @Override
     protected void onResume(){
         super.onResume();
-        if(map_ready && list_back && adicionado){
+        if(map_ready && list_back){
             mMap.clear();
             DrawnMarkers(mMap);
             list_back = false;
