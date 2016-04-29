@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,16 +33,19 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.io.IOException;
 import java.util.List;
 
 public class LoggedActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback{
 
     private GoogleMap mMap;
+    Thread textback;
     FloatingActionButton fab_menu, fabAction1, fabAction2, fabAction3;
+    LinearLayout text1, text2, text3;
     private boolean expanded = false;
     boolean preenchido = false, adicionado = false, map_ready = false, list_back = false, info_adapter = false;
-    private float offset1, offset2, offset3;
+    private float offset1, offset2, offset3, textset1, textset2, textset3;
     double lat, lng;
     String int_ext, item_selecionado, nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
     Obra obra = new Obra();
@@ -66,6 +70,9 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         fabAction1 = (FloatingActionButton) findViewById(R.id.fab1);
         fabAction2 = (FloatingActionButton) findViewById(R.id.fab2);
         fabAction3 = (FloatingActionButton) findViewById(R.id.fab3);
+        text1 = (LinearLayout) findViewById(R.id.text1);
+        text2 = (LinearLayout) findViewById(R.id.text2);
+        text3 = (LinearLayout) findViewById(R.id.text3);
         fab_menu = (FloatingActionButton) findViewById(R.id.fab_menu);
         fab_menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +80,9 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 expanded = !expanded;
                 if (expanded) {
                     expandFab();
+                    expandText();
                 } else {
+                    collapseText();
                     collapseFab();
                 }
             }
@@ -142,6 +151,13 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 fabAction2.setTranslationY(offset2);
                 offset3 = fab_menu.getY() - fabAction3.getY();
                 fabAction3.setTranslationY(offset3);
+
+                textset1 = fabAction1.getX() - text1.getX();
+                text1.setTranslationX(textset1);
+                textset2 = fabAction2.getX() - text2.getX();
+                text2.setTranslationX(textset2);
+                textset3 = fabAction3.getX() - text3.getX();
+                text3.setTranslationX(textset3);
                 return true;
             }
         });
@@ -328,7 +344,41 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         animateFab();
     }
 
+    private void collapseText() {
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(createCollapseLateralAnimator(text1, textset1),
+                createCollapseLateralAnimator(text2, textset2),
+                createCollapseLateralAnimator(text3, textset3));
+        animatorSet.start();
+        animateFab();
+        Runnable clickButton = new Runnable() {
+            @Override
+            public void run() {
+                text1.setVisibility(View.INVISIBLE);
+                text2.setVisibility(View.INVISIBLE);
+                text3.setVisibility(View.INVISIBLE);
+            }
+        };
+        text1.postDelayed(clickButton, 180);
+        text2.postDelayed(clickButton, 180);
+        text3.postDelayed(clickButton, 180);
+    }
+
+    private void expandText() {
+        text1.setVisibility(View.VISIBLE);
+        text2.setVisibility(View.VISIBLE);
+        text3.setVisibility(View.VISIBLE);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(createExpandLateralAnimator(text1, textset1),
+                createExpandLateralAnimator(text2, textset2),
+                createExpandLateralAnimator(text3, textset3));
+        animatorSet.start();
+        animateFab();
+    }
+
     private static final String TRANSLATION_Y = "translationY";
+
+    private static final String TRANSLATION_X = "translationX";
 
     private Animator createCollapseAnimator(View view, float offset) {
         return ObjectAnimator.ofFloat(view, TRANSLATION_Y, 0, offset)
@@ -337,6 +387,16 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
 
     private Animator createExpandAnimator(View view, float offset) {
         return ObjectAnimator.ofFloat(view, TRANSLATION_Y, offset, 0)
+                .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
+    }
+
+    private Animator createCollapseLateralAnimator(View view, float offset) {
+        return ObjectAnimator.ofFloat(view, TRANSLATION_X, 0, offset)
+                .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
+    }
+
+    private Animator createExpandLateralAnimator(View view, float offset) {
+        return ObjectAnimator.ofFloat(view, TRANSLATION_X, offset, 0)
                 .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
     }
 
