@@ -26,7 +26,7 @@
         android:layout_above="@+id/fab1"
         android:layout_alignStart="@+id/fab_menu"
         android:layout_marginStart="9dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="5dp"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab1"
@@ -37,7 +37,7 @@
         android:layout_above="@+id/fab_menu"
         android:layout_alignStart="@+id/fab_menu"
         android:layout_marginStart="9dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="5dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_menu"
@@ -47,7 +47,7 @@
         android:src="@android:drawable/ic_dialog_dialer"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp" />
