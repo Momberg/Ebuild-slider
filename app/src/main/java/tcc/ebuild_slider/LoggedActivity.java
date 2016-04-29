@@ -40,7 +40,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     private GoogleMap mMap;
     FloatingActionButton fab_menu, fabAction1, fabAction2, fabAction3;
     private boolean expanded = false;
-    boolean preenchido = false, adicionado = false, map_ready = false, list_back = false;
+    boolean preenchido = false, adicionado = false, map_ready = false, list_back = false, info_adapter = false;
     private float offset1, offset2, offset3;
     double lat, lng;
     String int_ext, item_selecionado, nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
@@ -159,7 +159,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
+            //  TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -202,6 +202,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     }
                     @Override
                     public View getInfoContents(Marker marker) {
+                        info_adapter = true;
                         View v = getLayoutInflater().inflate(R.layout.info_marker, null);
                         TextView nome_obra = (TextView) v.findViewById(R.id.nome_obra);
                         TextView endereco_obra = (TextView) v.findViewById(R.id.endereco_obra);
@@ -221,12 +222,21 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                             fase_obra.setText(o.getTipoFase());
                             item_fase_obra.setText(o.getFase());
                         } else {
-                            toast("LatLng not found");
+                            toast("Information not found");
                         }
                         return v;
                     }
                 });
                 return false;
+            }
+        });
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if(info_adapter){
+                    info_adapter = false;
+                }
             }
         });
     }
@@ -267,6 +277,11 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (expanded) {
+            collapseFab();
+            expanded = !expanded;
+        } else if(info_adapter){
+            info_adapter = true;
         } else {
             super.onBackPressed();
         }
