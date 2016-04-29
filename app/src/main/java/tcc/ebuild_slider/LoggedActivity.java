@@ -40,7 +40,6 @@ import java.util.List;
 public class LoggedActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback{
 
     private GoogleMap mMap;
-    Thread textback;
     FloatingActionButton fab_menu, fabAction1, fabAction2, fabAction3;
     LinearLayout text1, text2, text3;
     private boolean expanded = false;
@@ -133,6 +132,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     db.save(obra);
                     limpa_var();
                     fabAction3.setVisibility(View.INVISIBLE);
+                    text1.setVisibility(View.INVISIBLE);
                     obra.setMarker(false);
                     adicionado = true;
                 } else {
@@ -268,8 +268,10 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         preenchido = cod_final.getBoolean("preenchido", preenchido);
         if(!preenchido){
             fabAction3.setVisibility(View.INVISIBLE);
+            text1.setVisibility(View.INVISIBLE);
         } else {
             fabAction3.setVisibility(View.VISIBLE);
+            text1.setVisibility(View.VISIBLE);
         }
     }
 
@@ -365,7 +367,9 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     }
 
     private void expandText() {
-        text1.setVisibility(View.VISIBLE);
+        if(preenchido){
+            text1.setVisibility(View.VISIBLE);
+        }
         text2.setVisibility(View.VISIBLE);
         text3.setVisibility(View.VISIBLE);
         AnimatorSet animatorSet = new AnimatorSet();

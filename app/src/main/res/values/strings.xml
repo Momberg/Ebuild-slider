@@ -30,4 +30,7 @@
     <string name="tipo_fase_adapter">Fase:</string>
     <string name="fase_adapter">Fase do processo:</string>
     <string name="excluir">Excluir</string>
+    <string name="info">Informações</string>
+    <string name="refresh">Atualizar</string>
+    <string name="add">Adicionar</string>
 </resources>

@@ -54,7 +54,6 @@
 
     <LinearLayout
         android:id="@+id/text1"
-        android:visibility="invisible"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
+            android:text="@string/add"
             android:id="@+id/textView8" />
     </LinearLayout>
 
@@ -84,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
+            android:text="@string/info"
             android:id="@+id/textView9" />
     </LinearLayout>
 
@@ -102,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
+            android:text="@string/refresh"
             android:id="@+id/textView10" />
     </LinearLayout>
 
