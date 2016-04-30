@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Ebuild-Slider.iml" filepath="$PROJECT_DIR$/Ebuild-Slider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Ebuild-slider.iml" filepath="$PROJECT_DIR$/Ebuild-slider.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

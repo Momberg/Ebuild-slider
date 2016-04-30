@@ -297,6 +297,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
             drawer.closeDrawer(GravityCompat.START);
         } else if (expanded) {
             collapseFab();
+            collapseText();
             expanded = !expanded;
         } else if(info_adapter){
             info_adapter = true;
