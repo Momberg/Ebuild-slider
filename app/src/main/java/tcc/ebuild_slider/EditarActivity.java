@@ -137,7 +137,7 @@ public class EditarActivity extends AppCompatActivity {
         rua.setText(o.getRua());
         bairro.setText(o.getBairro());
         cidade.setText(o.getCidade());
-        if(o.getTipoFase().equals("Interno")){
+        if(o.getTipoFase().equals("Interna")){
             in.setChecked(true);
             adapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_list_item_1, interno);
         } else {
