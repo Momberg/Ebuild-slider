@@ -79,9 +79,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 expanded = !expanded;
                 if (expanded) {
                     expandFab();
-                    expandText();
                 } else {
-                    collapseText();
                     collapseFab();
                 }
             }
@@ -333,23 +331,8 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(createCollapseAnimator(fabAction1, offset1),
                 createCollapseAnimator(fabAction2, offset2),
-                createCollapseAnimator(fabAction3, offset3));
-        animatorSet.start();
-        animateFab();
-    }
-
-    private void expandFab() {
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(createExpandAnimator(fabAction1, offset1),
-                createExpandAnimator(fabAction2, offset2),
-                createExpandAnimator(fabAction3, offset3));
-        animatorSet.start();
-        animateFab();
-    }
-
-    private void collapseText() {
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(createCollapseLateralAnimator(text1, textset1),
+                createCollapseAnimator(fabAction3, offset3),
+                createCollapseLateralAnimator(text1, textset1),
                 createCollapseLateralAnimator(text2, textset2),
                 createCollapseLateralAnimator(text3, textset3));
         animatorSet.start();
@@ -367,14 +350,17 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         text3.postDelayed(clickButton, 180);
     }
 
-    private void expandText() {
+    private void expandFab() {
         if(preenchido){
             text1.setVisibility(View.VISIBLE);
         }
         text2.setVisibility(View.VISIBLE);
         text3.setVisibility(View.VISIBLE);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(createExpandLateralAnimator(text1, textset1),
+        animatorSet.playTogether(createExpandAnimator(fabAction1, offset1),
+                createExpandAnimator(fabAction2, offset2),
+                createExpandAnimator(fabAction3, offset3),
+                createExpandLateralAnimator(text1, textset1),
                 createExpandLateralAnimator(text2, textset2),
                 createExpandLateralAnimator(text3, textset3));
         animatorSet.start();
