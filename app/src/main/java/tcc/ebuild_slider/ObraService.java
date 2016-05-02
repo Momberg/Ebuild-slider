@@ -5,6 +5,12 @@ import java.io.IOException;
 import java.util.List;
 
 public class ObraService {
+
+    public List<Obra> getObrabyID(Context context, int ID){
+        List<Obra> obras = getObrasFromBancoByID(context, ID);
+        return obras;
+    }
+
     public List<Obra> getObrasAll(Context context) throws IOException {
         List<Obra> obras = getObrasFromBancoAll(context);
         return obras;
@@ -13,6 +19,16 @@ public class ObraService {
     public List<Obra> getObrasLatLng(Context context, double lat, double lng){
         List<Obra> obras = getObrasFromBancoLatLng(context, lat, lng);
         return obras;
+    }
+
+    private static List<Obra> getObrasFromBancoByID(Context context, int ID){
+        ObrasDB db = new ObrasDB(context);
+        try{
+            List<Obra> obras = db.findbyID(ID);
+            return obras;
+        } finally {
+            db.close();
+        }
     }
 
     private static List<Obra> getObrasFromBancoAll(Context context) throws IOException{

@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="tcc.ebuild_slider.FormActivity">
+    tools:context="tcc.ebuild_slider.EditarActivity">
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -179,8 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/interno"
-                android:id="@+id/radioInterno"
-                android:checked="true" />
+                android:id="@+id/radioInterno"/>
 
             <RadioButton
                 android:layout_width="wrap_content"

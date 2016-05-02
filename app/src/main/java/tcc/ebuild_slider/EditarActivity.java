@@ -14,60 +14,48 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-public class FormActivity extends AppCompatActivity {
+import java.util.List;
+
+public class EditarActivity extends AppCompatActivity {
+
 
     private static final int INTERNO = 2131558558;
     private static final int EXTERNO = 2131558559;
     EditText nome, data, rua, bairro, cidade;
     Button salvar, cancelar;
     String nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
-    boolean preenchido = false;
-    RadioButton int_ext;
+    RadioButton int_ext, in, out;
     RadioGroup GrupoRadio;
     String[] interno, externo;
     String item_selecionado;
     ListView lista;
-    int item = 0;
-    SharedPreferences cod_final;
+    int item = 0, ID_obra, temId;
+    SharedPreferences cod_obra;
+    final ObraService service = new ObraService();
+    List<Obra> obra;
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_form);
+        setContentView(R.layout.activity_editar);
+        cod_obra = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         interno = new String[] {"Verificar a necessidade","Elaboração dos estudos técnicos preliminares","Licença ambiental prévia","Elaboração do projeto básico","Elaboração do projeto executivo"};
         externo = new String[] {"Publicação do edital","Licitação","Contrataçao e designação do fiscal da obra","Pagamento seguindo o cronograma físico-financeiro e ordem cronológica","Recebimento da obra","Devolução de garantia","Registros finais"};
         find_IDs();
+        getID_para_banco();
         fases();
-        preenchido = false;
-        cod_final = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if(!cod_final.getString("nome", "").equals("")){
-            nome.setText(cod_final.getString("nome", ""));
-            data.setText(cod_final.getString("data", ""));
-            rua.setText(cod_final.getString("rua", ""));
-            bairro.setText(cod_final.getString("bairro", ""));
-            cidade.setText(cod_final.getString("cidade", ""));
-        }
-
         salvar = (Button) findViewById(R.id.Bsalvar);
         salvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 salvar();
                 if(item == 1 && !nome_obra.equals("") && !data_obra.equals("") && !rua_obra.equals("") && !bairro_obra.equals("") && !cidade_obra.equals("")){
-                    cod_final.edit().putString("nome", nome_obra).apply();
-                    cod_final.edit().putString("data", data_obra).apply();
-                    cod_final.edit().putString("rua", rua_obra).apply();
-                    cod_final.edit().putString("bairro", bairro_obra).apply();
-                    cod_final.edit().putString("cidade", cidade_obra).apply();
-                    cod_final.edit().putString("tipo", int_ext.getText().toString()).apply();
-                    cod_final.edit().putString("fase", item_selecionado).apply();
-                    preenchido = true;
-                    cod_final.edit().putBoolean("preenchido", preenchido).apply();
+
                     finish();
                 } else {
                     toast("Preencha corretamente o formulário");
                 }
-
             }
         });
 
@@ -75,7 +63,6 @@ public class FormActivity extends AppCompatActivity {
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cod_final.edit().putBoolean("preenchido", preenchido).apply();
                 finish();
             }
         });
@@ -91,11 +78,8 @@ public class FormActivity extends AppCompatActivity {
 
     public void fases(){
         GrupoRadio = (RadioGroup) findViewById(R.id.radio_Ext_Int);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_list_item_1, interno);
         lista = (ListView) findViewById(R.id.list_Int_Ext);
         lista.setAdapter(adapter);
-        int temId = GrupoRadio.getCheckedRadioButtonId();
-        int_ext = (RadioButton) findViewById(temId);
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 item_selecionado = (String) arg0.getAdapter().getItem(arg2);
@@ -140,5 +124,25 @@ public class FormActivity extends AppCompatActivity {
         rua = (EditText) findViewById(R.id.rua);
         bairro = (EditText) findViewById(R.id.bairro);
         cidade = (EditText) findViewById(R.id.cidade);
+        in = (RadioButton) findViewById(R.id.radioInterno);
+        out = (RadioButton) findViewById(R.id.radioExterno);
+    }
+
+    private void getID_para_banco(){
+        ID_obra = cod_obra.getInt("ID", 0);
+        obra = service.getObrabyID(getApplicationContext(), ID_obra);
+        Obra o = obra.get(0);
+        nome.setText(o.getNome());
+        data.setText(o.getData());
+        rua.setText(o.getRua());
+        bairro.setText(o.getBairro());
+        cidade.setText(o.getCidade());
+        if(o.getTipoFase().equals("Interno")){
+            in.setChecked(true);
+            adapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_list_item_1, interno);
+        } else {
+            out.setChecked(true);
+            adapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_list_item_1, externo);
+        }
     }
 }

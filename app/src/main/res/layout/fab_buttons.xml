@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_toStartOf="@+id/fab3"
         android:layout_alignTop="@+id/fab3"
-        android:layout_marginTop="11dp">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_toStartOf="@+id/fab2"
         android:layout_alignTop="@+id/fab2"
-        android:layout_marginTop="11dp">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
         android:layout_height="wrap_content"
         android:layout_toStartOf="@+id/fab1"
         android:layout_alignTop="@+id/fab1"
-        android:layout_marginTop="11dp">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"

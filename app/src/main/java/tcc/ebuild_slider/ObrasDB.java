@@ -64,7 +64,16 @@ public class ObrasDB extends SQLiteOpenHelper {
         } finally {
             db.close();
         }
+    }
 
+    public List<Obra> findbyID(int ID){
+        SQLiteDatabase db = getWritableDatabase();
+        try{
+            Cursor c = db.query("obras", null, "_id = " + ID, null, null, null, null);
+            return toList(c);
+        } finally {
+            db.close();
+        }
     }
 
     public List<Obra> findLatLng(double lat, double lng){

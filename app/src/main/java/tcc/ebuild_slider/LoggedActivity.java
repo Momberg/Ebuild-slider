@@ -55,7 +55,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logged);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ObrasDB db = new ObrasDB(this);
         cod_final = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -295,7 +295,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
             drawer.closeDrawer(GravityCompat.START);
         } else if (expanded) {
             collapseFab();
-            collapseText();
             expanded = !expanded;
         } else if(info_adapter){
             info_adapter = true;

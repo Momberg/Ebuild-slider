@@ -1,5 +1,8 @@
 package tcc.ebuild_slider;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,16 +16,17 @@ import java.util.List;
 public class ListActivity extends AppCompatActivity {
 
     int ID_Lista = -1;
-    boolean selecionado = false;
     ListView lista;
     List<Obra> obras;
     ObraService service = new ObraService();
     ObraAdapter adapter;
+    SharedPreferences cod_obra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        cod_obra = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         try {
             obras = service.getObrasAll(this);
         } catch (IOException e) {
@@ -35,7 +39,6 @@ public class ListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 Obra o = obras.get(arg2);
                 ID_Lista = o.getID();
-                selecionado = true;
             }
         });
 
@@ -63,7 +66,13 @@ public class ListActivity extends AppCompatActivity {
         edita_obra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toast("Editar");
+                if(ID_Lista != -1){
+                    cod_obra.edit().putInt("ID", ID_Lista).apply();
+                    Intent intent = new Intent(getApplicationContext(), EditarActivity.class);
+                    startActivity(intent);
+                } else {
+                    toast("Selecione alguma obra");
+                }
             }
         });
     }
