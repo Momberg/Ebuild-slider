@@ -141,4 +141,5 @@ public class FormActivity extends AppCompatActivity {
         bairro = (EditText) findViewById(R.id.bairro);
         cidade = (EditText) findViewById(R.id.cidade);
     }
+
 }

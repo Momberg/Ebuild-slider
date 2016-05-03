@@ -48,6 +48,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     double lat, lng;
     String int_ext, item_selecionado, nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
     Obra obra = new Obra();
+    Obra o;
     ObraService service = new ObraService();
     SharedPreferences cod_final;
 
@@ -126,7 +127,10 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     cidade_obra = cod_final.getString("cidade", "");
                     int_ext = cod_final.getString("tipo", "");
                     item_selecionado = cod_final.getString("fase", "");
-                    obra.setObraOnClick(nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra, int_ext, item_selecionado, lat, lng);
+                    String temp_lat, temp_lng;
+                    temp_lat = String.valueOf(lat);
+                    temp_lng = String.valueOf(lng);
+                    obra.setObraOnClick(nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra, int_ext, item_selecionado, temp_lat, temp_lng);
                     db.save(obra);
                     limpa_var();
                     fabAction3.setVisibility(View.INVISIBLE);
@@ -227,7 +231,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                         List<Obra> obras;
                         obras = service.getObrasLatLng(getApplicationContext(), markerPosition.latitude, markerPosition.longitude);
                         if(obras.size() > 0){
-                            Obra o = obras.get(0);
+                            o = obras.get(0);
                             nome_obra.setText(o.getNome());
                             String endereco;
                             endereco = o.getRua() + ", " + o.getBairro() + " - " + o.getCidade();
@@ -398,13 +402,16 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     }
 
     public void DrawnMarkers(GoogleMap googleMap){
-        Double lat, lng;
+        String lat, lng;
         try {
             List<Obra> obras = service.getObrasAll(this);
             for(Obra obra:obras){
                 lat = obra.getLat();
                 lng = obra.getLng();
-                LatLng point = new LatLng(lat, lng);
+                Double latitude, longitude;
+                latitude = Double.valueOf(lat);
+                longitude = Double.valueOf(lng);
+                LatLng point = new LatLng(latitude, longitude);
                 googleMap.addMarker(new MarkerOptions().position(point).draggable(false));
             }
         } catch (IOException e) {
@@ -425,4 +432,5 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         preenchido = false;
         cod_final.edit().putBoolean("preenchido", preenchido).apply();
     }
+
 }

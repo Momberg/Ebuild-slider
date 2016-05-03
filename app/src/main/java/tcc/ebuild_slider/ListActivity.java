@@ -20,13 +20,15 @@ public class ListActivity extends AppCompatActivity {
     List<Obra> obras;
     ObraService service = new ObraService();
     ObraAdapter adapter;
-    SharedPreferences cod_obra;
+    SharedPreferences cod_obra, edit;
+    boolean editado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         cod_obra = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        edit = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         try {
             obras = service.getObrasAll(this);
         } catch (IOException e) {
@@ -49,11 +51,6 @@ public class ListActivity extends AppCompatActivity {
                 if (ID_Lista != -1) {
                     ObrasDB db = new ObrasDB(getApplicationContext());
                     db.delete(ID_Lista);
-                    try {
-                        obras = service.getObrasAll(getApplicationContext());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     update_list();
                     ID_Lista = -1;
                 } else {
@@ -82,7 +79,25 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void update_list(){
+        try {
+            obras = service.getObrasAll(getApplicationContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         adapter = new ObraAdapter(getApplicationContext(), obras);
         lista.setAdapter(adapter);
     }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        editado = edit.getBoolean("editado", false);
+        if(editado){
+            update_list();
+            toast("Atualizado");
+            editado = false;
+            edit.edit().putBoolean("editado", editado).apply();
+        }
+    }
+
 }

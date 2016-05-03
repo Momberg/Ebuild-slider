@@ -1,8 +1,9 @@
 package tcc.ebuild_slider;
 
 public class Obra {
+
     int id;
-    double lat = 0, lng = 0;
+    String lat = "", lng = "";
     String nome= "";
     String TipoFase;
     String fase;
@@ -12,7 +13,7 @@ public class Obra {
     String cidade = "";
     boolean marker = false;
 
-    public void setObra(String nome, String data, String tipoFase, String fase, Double lat, Double lng){
+    public void setObra(String nome, String data, String tipoFase, String fase, String lat, String lng){
         setNome(nome);
         setData(data);
         setTipoFase(tipoFase);
@@ -21,7 +22,7 @@ public class Obra {
         setLng(lng);
     }
 
-    public void setObraOnClick(String nome, String data, String rua, String bairro, String cidade, String tipoFase, String fase, Double lat, Double lng){
+    public void setObraOnClick(String nome, String data, String rua, String bairro, String cidade, String tipoFase, String fase, String lat, String lng){
         setNome(nome);
         setData(data);
         setRua(rua);
@@ -83,19 +84,19 @@ public class Obra {
         this.data = data;
     }
 
-    public double getLat(){
+    public String getLat(){
         return lat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(String lat) {
         this.lat = lat;
     }
 
-    public double getLng(){
+    public String getLng(){
         return lng;
     }
 
-    public void setLng(double lng) {
+    public void setLng(String lng) {
         this.lng = lng;
     }
 

@@ -18,7 +18,6 @@ import java.util.List;
 
 public class EditarActivity extends AppCompatActivity {
 
-
     private static final int INTERNO = 2131558558;
     private static final int EXTERNO = 2131558559;
     EditText nome, data, rua, bairro, cidade;
@@ -27,19 +26,23 @@ public class EditarActivity extends AppCompatActivity {
     RadioButton int_ext, in, out;
     RadioGroup GrupoRadio;
     String[] interno, externo;
-    String item_selecionado;
+    String item_selecionado, temp;
     ListView lista;
-    int item = 0, ID_obra, temId;
-    SharedPreferences cod_obra;
+    int item = 0, ID_obra;
+    SharedPreferences cod_obra, edit;
     final ObraService service = new ObraService();
     List<Obra> obra;
+    Obra o;
     ArrayAdapter<String> adapter;
+    final ObrasDB db = new ObrasDB(this);
+    boolean editado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar);
         cod_obra = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        edit = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         interno = new String[] {"Verificar a necessidade","Elaboração dos estudos técnicos preliminares","Licença ambiental prévia","Elaboração do projeto básico","Elaboração do projeto executivo"};
         externo = new String[] {"Publicação do edital","Licitação","Contrataçao e designação do fiscal da obra","Pagamento seguindo o cronograma físico-financeiro e ordem cronológica","Recebimento da obra","Devolução de garantia","Registros finais"};
         find_IDs();
@@ -49,9 +52,11 @@ public class EditarActivity extends AppCompatActivity {
         salvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                salvar();
+                armazenar_info();
                 if(item == 1 && !nome_obra.equals("") && !data_obra.equals("") && !rua_obra.equals("") && !bairro_obra.equals("") && !cidade_obra.equals("")){
-
+                    salvar();
+                    editado = true;
+                    edit.edit().putBoolean("editado", editado).apply();
                     finish();
                 } else {
                     toast("Preencha corretamente o formulário");
@@ -68,12 +73,18 @@ public class EditarActivity extends AppCompatActivity {
         });
     }
 
-    public void salvar(){
+    private void armazenar_info(){
         nome_obra = nome.getText().toString();
         data_obra = data.getText().toString();
         rua_obra = rua.getText().toString();
         bairro_obra = bairro.getText().toString();
         cidade_obra = cidade.getText().toString();
+        temp = int_ext.getText().toString();
+    }
+
+    public void salvar(){
+        o.edit_obra(nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra, temp, item_selecionado);
+        db.save(o);
     }
 
     public void fases(){
@@ -86,7 +97,7 @@ public class EditarActivity extends AppCompatActivity {
                 item = 1;
             }
         });
-
+        int_ext = (RadioButton) findViewById(GrupoRadio.getCheckedRadioButtonId());
         GrupoRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -131,7 +142,7 @@ public class EditarActivity extends AppCompatActivity {
     private void getID_para_banco(){
         ID_obra = cod_obra.getInt("ID", 0);
         obra = service.getObrabyID(getApplicationContext(), ID_obra);
-        Obra o = obra.get(0);
+        o = obra.get(0);
         nome.setText(o.getNome());
         data.setText(o.getData());
         rua.setText(o.getRua());

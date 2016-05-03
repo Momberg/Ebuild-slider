@@ -43,11 +43,15 @@ public class ObraService {
 
     private static List<Obra> getObrasFromBancoLatLng(Context context, double lat, double lng){
         ObrasDB db = new ObrasDB(context);
+        String latitude, longitude;
+        latitude = String.valueOf(lat);
+        longitude = String.valueOf(lng);
         try{
-            List<Obra> obras = db.findLatLng(lat, lng);
+            List<Obra> obras = db.findLatLng(latitude, longitude);
             return obras;
         } finally {
             db.close();
         }
     }
+
 }
