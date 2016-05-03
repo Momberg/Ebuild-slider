@@ -18,13 +18,14 @@ public class FormActivity extends AppCompatActivity {
 
     private static final int INTERNO = 2131558558;
     private static final int EXTERNO = 2131558559;
+    private static final String[] interno =  new String[] {"Verificar a necessidade","Elaboração dos estudos técnicos preliminares","Licença ambiental prévia","Elaboração do projeto básico","Elaboração do projeto executivo"};
+    private static final String[] externo = new String[] {"Publicação do edital","Licitação","Contrataçao e designação do fiscal da obra","Pagamento seguindo o cronograma físico-financeiro e ordem cronológica","Recebimento da obra","Devolução de garantia","Registros finais"};
     EditText nome, data, rua, bairro, cidade;
     Button salvar, cancelar;
     String nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
     boolean preenchido = false;
     RadioButton int_ext;
     RadioGroup GrupoRadio;
-    String[] interno, externo;
     String item_selecionado;
     ListView lista;
     int item = 0;
@@ -34,8 +35,6 @@ public class FormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
-        interno = new String[] {"Verificar a necessidade","Elaboração dos estudos técnicos preliminares","Licença ambiental prévia","Elaboração do projeto básico","Elaboração do projeto executivo"};
-        externo = new String[] {"Publicação do edital","Licitação","Contrataçao e designação do fiscal da obra","Pagamento seguindo o cronograma físico-financeiro e ordem cronológica","Recebimento da obra","Devolução de garantia","Registros finais"};
         find_IDs();
         fases();
         preenchido = false;
