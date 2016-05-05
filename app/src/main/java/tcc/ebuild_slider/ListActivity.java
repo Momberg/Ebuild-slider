@@ -5,9 +5,13 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import java.io.IOException;
@@ -21,7 +25,9 @@ public class ListActivity extends AppCompatActivity {
     ObraService service = new ObraService();
     ObraAdapter adapter;
     SharedPreferences cod_obra, edit;
-    boolean editado = false;
+    String nome_busca;
+    EditText busca;
+    boolean editado = false, busca_done = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,21 +35,44 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         cod_obra = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         edit = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        try {
-            obras = service.getObrasAll(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        adapter = new ObraAdapter(this, obras);
-        lista = (ListView) findViewById(R.id.lista_edita_obra);
-        lista.setAdapter(adapter);
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Obra o = obras.get(arg2);
-                ID_Lista = o.getID();
-            }
-        });
+        botoes();
+        listadeObras();
+    }
 
+    private void toast(String text){
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    private void update_list(){
+        if(!busca_done){
+            try {
+                obras = service.getObrasAll(getApplicationContext());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            adapter = new ObraAdapter(getApplicationContext(), obras);
+            lista.setAdapter(adapter);
+        } else {
+            obras = service.searchObrasName(getApplicationContext(), nome_busca);
+            adapter = new ObraAdapter(getApplicationContext(), obras);
+            lista.setAdapter(adapter);
+        }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        editado = edit.getBoolean("editado", false);
+        if(editado){
+            update_list();
+            toast("Atualizado");
+            editado = false;
+            edit.edit().putBoolean("editado", editado).apply();
+        }
+    }
+
+    private void botoes(){
+        busca = (EditText) findViewById(R.id.busca);
         Button remove_obra = (Button) findViewById(R.id.exclui);
         remove_obra.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,30 +103,62 @@ public class ListActivity extends AppCompatActivity {
         });
     }
 
-    private void toast(String text){
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-    }
-
-    private void update_list(){
+    private void listadeObras(){
         try {
-            obras = service.getObrasAll(getApplicationContext());
+            obras = service.getObrasAll(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        adapter = new ObraAdapter(getApplicationContext(), obras);
+        adapter = new ObraAdapter(this, obras);
+        lista = (ListView) findViewById(R.id.lista_edita_obra);
         lista.setAdapter(adapter);
+        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                Obra o = obras.get(arg2);
+                ID_Lista = o.getID();
+            }
+        });
     }
 
     @Override
-    protected void onResume(){
-        super.onResume();
-        editado = edit.getBoolean("editado", false);
-        if(editado){
-            update_list();
-            toast("Atualizado");
-            editado = false;
-            edit.edit().putBoolean("editado", editado).apply();
+    public void onBackPressed() {
+        if (busca_done) {
+            try {
+                obras = service.getObrasAll(this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            adapter = new ObraAdapter(this, obras);
+            lista.setAdapter(adapter);
+            busca_done = false;
+        } else {
+            super.onBackPressed();
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
+        MenuInflater mi = getMenuInflater();
+        mi.inflate(R.menu.search_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.search_dialog:
+                nome_busca = busca.getText().toString();
+                if (!nome_busca.equals("")) {
+                    obras = service.searchObrasName(getApplicationContext(), nome_busca);
+                    adapter = new ObraAdapter(getApplicationContext(), obras);
+                    lista.setAdapter(adapter);
+                    busca_done = true;
+                } else {
+                    toast("Preencha o campo de busca");
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

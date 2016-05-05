@@ -21,6 +21,11 @@ public class ObraService {
         return obras;
     }
 
+    public List<Obra> searchObrasName(Context context, String name){
+        List<Obra> obras = searchObrasFromBancoByName(context, name);
+        return obras;
+    }
+
     private static List<Obra> getObrasFromBancoByID(Context context, int ID){
         ObrasDB db = new ObrasDB(context);
         try{
@@ -54,4 +59,13 @@ public class ObraService {
         }
     }
 
+    private static List<Obra> searchObrasFromBancoByName(Context context, String name){
+        ObrasDB db = new ObrasDB(context);
+        try{
+            List<Obra> obras = db.searchObraByName(name);
+            return  obras;
+        } finally {
+            db.close();
+        }
+    }
 }

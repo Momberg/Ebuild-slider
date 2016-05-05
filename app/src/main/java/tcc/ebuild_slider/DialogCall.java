@@ -13,8 +13,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class DialogCall extends AppCompatActivity {
-    EditText user, password;
-    Button Blog, Bcancel;
+    EditText user, password, busca;
+    Button Blog, Bcancel, Bsearch;
     Activity str;
     Dialog myDialog;
 
@@ -70,6 +70,25 @@ public class DialogCall extends AppCompatActivity {
 
     private void toast(String text){
         Toast.makeText(str.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    public String callDialogSearch(final Activity activity, String search){
+        str = activity;
+        myDialog = new Dialog(activity);
+        myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        myDialog.setContentView(R.layout.dialog_search);
+        myDialog.setCanceledOnTouchOutside(false);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        busca = (EditText) findViewById(R.id.busca_text);
+        search = busca.getText().toString();
+        Bsearch = (Button) findViewById(R.id.busca_btn);
+        Bsearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toast("teste");
+            }
+        });
+        return search;
     }
 
 }

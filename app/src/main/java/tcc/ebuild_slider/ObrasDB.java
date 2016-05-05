@@ -66,6 +66,16 @@ public class ObrasDB extends SQLiteOpenHelper {
         }
     }
 
+    public List<Obra> searchObraByName(String name){
+        SQLiteDatabase db = getReadableDatabase();
+        try{
+            Cursor c = db.query("obras", null, "nome LIKE '" + name + "%'", null, null, null, "nome");
+            return  toList(c);
+        } finally {
+            db.close();
+        }
+    }
+
     public List<Obra> findbyID(int ID){
         SQLiteDatabase db = getWritableDatabase();
         try{
@@ -110,11 +120,6 @@ public class ObrasDB extends SQLiteOpenHelper {
     public void delete(int ID){
         SQLiteDatabase db = getWritableDatabase();
         db.delete("obras","_id=" + ID, null);
-    }
-
-    public void limpa_db(){
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete("obras", null, null);
     }
 
 }

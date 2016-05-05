@@ -43,6 +43,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/excluir"
                 android:id="@+id/exclui" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/busca"
+                android:layout_weight="1" />
         </LinearLayout>
 
     </LinearLayout>
