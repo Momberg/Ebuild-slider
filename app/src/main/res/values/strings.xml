@@ -33,4 +33,5 @@
     <string name="info">Informações</string>
     <string name="refresh">Atualizar</string>
     <string name="add">Adicionar</string>
+    <string name="fase_anterior">Fase anterior:</string>
 </resources>
