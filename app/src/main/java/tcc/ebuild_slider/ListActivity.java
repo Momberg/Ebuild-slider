@@ -1,7 +1,11 @@
 package tcc.ebuild_slider;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,9 +30,10 @@ public class ListActivity extends AppCompatActivity {
     ObraService service = new ObraService();
     ObraAdapter adapter;
     SharedPreferences cod_obra, edit;
-    String nome_busca;
-    EditText busca;
+    String nome_busca, search;
     boolean editado = false, busca_done = false;
+    Button Bsearch;
+    EditText busca;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +78,6 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void botoes(){
-        busca = (EditText) findViewById(R.id.busca);
         Button remove_obra = (Button) findViewById(R.id.exclui);
         remove_obra.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,17 +153,35 @@ public class ListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.search_dialog:
+                callDialogSearch();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //Método de criação de Dialog para fazer busca na base por obras.
+
+    public void callDialogSearch(){
+        final Dialog myDialog = new Dialog(this);
+        myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        myDialog.setContentView(R.layout.dialog_search);
+        myDialog.setCanceledOnTouchOutside(false);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        busca = (EditText) myDialog.findViewById(R.id.busca_text);
+        Bsearch = (Button) myDialog.findViewById(R.id.busca_btn);
+        myDialog.show();
+        Bsearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 nome_busca = busca.getText().toString();
-                if (!nome_busca.equals("")) {
+                if(!nome_busca.equals("")){
                     obras = service.searchObrasName(getApplicationContext(), nome_busca);
                     adapter = new ObraAdapter(getApplicationContext(), obras);
                     lista.setAdapter(adapter);
                     busca_done = true;
-                } else {
-                    toast("Preencha o campo de busca");
                 }
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+                myDialog.dismiss();
+            }
+        });
     }
 }

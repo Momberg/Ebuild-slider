@@ -13,10 +13,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class DialogCall extends AppCompatActivity {
-    EditText user, password, busca;
-    Button Blog, Bcancel, Bsearch;
+    EditText user, password;
+    Button Blog, Bcancel;
     Activity str;
     Dialog myDialog;
+
 
     public void callLoginDialog(final Activity activity) {
         str = activity;
@@ -50,7 +51,6 @@ public class DialogCall extends AppCompatActivity {
                         Intent intent = new Intent(view.getContext(), LoggedActivity.class);
                         activity.startActivity(intent);
                         myDialog.dismiss();
-                        //activity.finish();
                     }
 
                     if (!((user.getText().toString().equals("admin")) && (password.getText().toString().equals("admin")))) {
@@ -70,25 +70,6 @@ public class DialogCall extends AppCompatActivity {
 
     private void toast(String text){
         Toast.makeText(str.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-    }
-
-    public String callDialogSearch(final Activity activity, String search){
-        str = activity;
-        myDialog = new Dialog(activity);
-        myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        myDialog.setContentView(R.layout.dialog_search);
-        myDialog.setCanceledOnTouchOutside(false);
-        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        busca = (EditText) findViewById(R.id.busca_text);
-        search = busca.getText().toString();
-        Bsearch = (Button) findViewById(R.id.busca_btn);
-        Bsearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toast("teste");
-            }
-        });
-        return search;
     }
 
 }
