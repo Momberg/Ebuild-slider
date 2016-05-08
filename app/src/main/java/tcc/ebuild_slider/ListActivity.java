@@ -1,11 +1,7 @@
 package tcc.ebuild_slider;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,10 +9,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import java.io.IOException;
@@ -32,8 +28,9 @@ public class ListActivity extends AppCompatActivity {
     SharedPreferences cod_obra, edit;
     String nome_busca, search;
     boolean editado = false, busca_done = false;
-    Button Bsearch;
+    Button Bsearch, remove_obra, edita_obra;
     EditText busca;
+    LinearLayout box_s, box_act_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +75,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void botoes(){
-        Button remove_obra = (Button) findViewById(R.id.exclui);
+        remove_obra = (Button) findViewById(R.id.exclui);
         remove_obra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +90,7 @@ public class ListActivity extends AppCompatActivity {
             }
         });
 
-        Button edita_obra = (Button) findViewById(R.id.edita);
+        edita_obra = (Button) findViewById(R.id.edita);
         edita_obra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +103,28 @@ public class ListActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Bsearch = (Button) findViewById(R.id.busca_btn);
+        Bsearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nome_busca = busca.getText().toString();
+                if(!nome_busca.equals("")) {
+                    obras = service.searchObrasName(getApplicationContext(), nome_busca);
+                    adapter = new ObraAdapter(getApplicationContext(), obras);
+                    lista.setAdapter(adapter);
+                    search_box_dismiss();
+                    busca_done = true;
+                } else {
+                    search_box_dismiss();
+                    busca_done = false;
+                }
+            }
+        });
+        busca = (EditText) findViewById(R.id.busca_text);
+
+        box_s = (LinearLayout) findViewById(R.id.box_search);
+        box_act_list = (LinearLayout) findViewById(R.id.box_btn_act_list);
     }
 
     private void listadeObras(){
@@ -135,6 +154,7 @@ public class ListActivity extends AppCompatActivity {
             }
             adapter = new ObraAdapter(this, obras);
             lista.setAdapter(adapter);
+            search_box_dismiss();
             busca_done = false;
         } else {
             super.onBackPressed();
@@ -153,35 +173,18 @@ public class ListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.search_dialog:
-                callDialogSearch();
+                busca_done = true;
+                search_box_call();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    //Método de criação de Dialog para fazer busca na base por obras.
+    private void search_box_call(){
+        box_s.setVisibility(View.VISIBLE);
+    }
 
-    public void callDialogSearch(){
-        final Dialog myDialog = new Dialog(this);
-        myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        myDialog.setContentView(R.layout.dialog_search);
-        myDialog.setCanceledOnTouchOutside(false);
-        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        busca = (EditText) myDialog.findViewById(R.id.busca_text);
-        Bsearch = (Button) myDialog.findViewById(R.id.busca_btn);
-        myDialog.show();
-        Bsearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nome_busca = busca.getText().toString();
-                if(!nome_busca.equals("")){
-                    obras = service.searchObrasName(getApplicationContext(), nome_busca);
-                    adapter = new ObraAdapter(getApplicationContext(), obras);
-                    lista.setAdapter(adapter);
-                    busca_done = true;
-                }
-                myDialog.dismiss();
-            }
-        });
+    private void search_box_dismiss(){
+        box_s.setVisibility(View.INVISIBLE);
     }
 }

@@ -7,5 +7,5 @@
         android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="always"
         android:orderInCategory="1"
-        android:title="teste" />
+        android:title="Pesquisa" />
 </menu>

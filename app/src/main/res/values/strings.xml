@@ -34,4 +34,8 @@
     <string name="refresh">Atualizar</string>
     <string name="add">Adicionar</string>
     <string name="fase_anterior">Fase anterior:</string>
+    <string name="editar">Editar</string>
+    <string name="pesquisa">Pesquisa</string>
+    <string name="buscar">Buscar</string>
+    <string name="nomedaobra">Nome da Obra</string>
 </resources>

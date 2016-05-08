@@ -27,6 +27,7 @@
 
         <LinearLayout
             android:orientation="horizontal"
+            android:id="@+id/box_btn_act_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -34,7 +35,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Editar"
+                android:text="@string/editar"
                 android:id="@+id/edita" />
 
             <Button
@@ -47,5 +48,7 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <include layout="@layout/search_box"/>
 
 </RelativeLayout>
