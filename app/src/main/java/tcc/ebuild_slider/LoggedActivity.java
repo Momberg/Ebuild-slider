@@ -40,137 +40,28 @@ import java.util.List;
 public class LoggedActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback{
 
     private GoogleMap mMap;
-    FloatingActionButton fab_menu, fabAction1, fabAction2, fabAction3;
-    LinearLayout text1, text2, text3;
+    FloatingActionButton fab_menu, fabAction1, fabAction2, fabAction3, fabAction4;
+    LinearLayout text1, text2_1, text3, text4;
     private boolean expanded = false;
-    boolean preenchido = false, adicionado = false, map_ready = false, list_back = false, info_adapter = false;
-    private float offset1, offset2, offset3, textset1, textset2, textset3;
+    boolean preenchido = false, adicionado = false, map_ready = false, list_back = false, info_adapter = false, form_enter = false;
+    private float offset1, offset2, offset3, offset4, textset1, textset2, textset3, textset4;
     double lat, lng;
     String int_ext, item_selecionado, nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
     Obra obra = new Obra();
     Obra o;
+    ObrasDB db;
     ObraService service = new ObraService();
     SharedPreferences cod_final;
+    ViewGroup fabContainer;
+    SupportMapFragment mapFragment;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logged);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        final ObrasDB db = new ObrasDB(this);
-        cod_final = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        preenchido = false;
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-        final ViewGroup fabContainer = (ViewGroup) findViewById(R.id.fab_container);
-        fabAction1 = (FloatingActionButton) findViewById(R.id.fab1);
-        fabAction2 = (FloatingActionButton) findViewById(R.id.fab2);
-        fabAction3 = (FloatingActionButton) findViewById(R.id.fab3);
-        text1 = (LinearLayout) findViewById(R.id.text1);
-        text2 = (LinearLayout) findViewById(R.id.text2);
-        text3 = (LinearLayout) findViewById(R.id.text3);
-        fab_menu = (FloatingActionButton) findViewById(R.id.fab_menu);
-        fab_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                expanded = !expanded;
-                if (expanded) {
-                    expandFab();
-                } else {
-                    collapseFab();
-                }
-            }
-        });
-
-        fabAction1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!obra.marker){
-                    mMap.clear();
-                    obra.setMarker(false);
-                    DrawnMarkers(mMap);
-                } else {
-                    toast("Não é possivel fazer update, fazer a inserção da obra adicionada");
-                }
-            }
-        });
-
-        fabAction2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (obra.getMarker() && (!preenchido)) {
-                    Intent intent = new Intent(view.getContext(), FormActivity.class);
-                    startActivity(intent);
-                    adicionado = false;
-                } else if ((!adicionado) && (preenchido)){
-                    Intent intent = new Intent(view.getContext(), FormActivity.class);
-                    startActivity(intent);
-                } else {
-                    toast("Adicione um marcador");
-                }
-            }
-        });
-
-        fabAction3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                preenchido = cod_final.getBoolean("preenchido", preenchido);
-                if(preenchido) {
-                    nome_obra = cod_final.getString("nome", "");
-                    data_obra = cod_final.getString("data", "");
-                    rua_obra = cod_final.getString("rua", "");
-                    bairro_obra = cod_final.getString("bairro", "");
-                    cidade_obra = cod_final.getString("cidade", "");
-                    int_ext = cod_final.getString("tipo", "");
-                    item_selecionado = cod_final.getString("fase", "");
-                    String temp_lat, temp_lng;
-                    temp_lat = String.valueOf(lat);
-                    temp_lng = String.valueOf(lng);
-                    obra.setObraOnClick(nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra, int_ext, item_selecionado, temp_lat, temp_lng);
-                    db.save(obra);
-                    limpa_var();
-                    fabAction3.setVisibility(View.INVISIBLE);
-                    text1.setVisibility(View.INVISIBLE);
-                    obra.setMarker(false);
-                    adicionado = true;
-                } else {
-                    toast("Informações não foram adicionadas");
-                }
-            }
-        });
-
-        fabContainer.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                fabContainer.getViewTreeObserver().removeOnPreDrawListener(this);
-                offset1 = fab_menu.getY() - fabAction1.getY();
-                fabAction1.setTranslationY(offset1);
-                offset2 = fab_menu.getY() - fabAction2.getY();
-                fabAction2.setTranslationY(offset2);
-                offset3 = fab_menu.getY() - fabAction3.getY();
-                fabAction3.setTranslationY(offset3);
-
-                textset1 = fabAction1.getX() - text1.getX();
-                text1.setTranslationX(textset1);
-                textset2 = fabAction2.getX() - text2.getX();
-                text2.setTranslationX(textset2);
-                textset3 = fabAction3.getX() - text3.getX();
-                text3.setTranslationX(textset3);
-                return true;
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        inic_variables();
+        FAB_MENU();
     }
 
     @Override
@@ -196,6 +87,8 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     lat = point.latitude;
                     lng = point.longitude;
                     obra.setMarker(true);
+                    fabAction3.setVisibility(View.VISIBLE);
+                    text2_1.setVisibility(View.VISIBLE);
                 } else {
                     toast("Adicione apenas um marcador por vez");
                 }
@@ -269,11 +162,20 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         }
         preenchido = cod_final.getBoolean("preenchido", preenchido);
         if(!preenchido){
-            fabAction3.setVisibility(View.INVISIBLE);
+            fabAction4.setVisibility(View.INVISIBLE);
             text1.setVisibility(View.INVISIBLE);
         } else {
-            fabAction3.setVisibility(View.VISIBLE);
+            fabAction4.setVisibility(View.VISIBLE);
             text1.setVisibility(View.VISIBLE);
+        }
+
+        form_enter = cod_final.getBoolean("entrou", form_enter);
+        if(form_enter){
+            fabAction3.setVisibility(View.VISIBLE);
+            text2_1.setVisibility(View.VISIBLE);
+        } else {
+            fabAction3.setVisibility(View.INVISIBLE);
+            text2_1.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -335,43 +237,50 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         animatorSet.playTogether(createCollapseAnimator(fabAction1, offset1),
                 createCollapseAnimator(fabAction2, offset2),
                 createCollapseAnimator(fabAction3, offset3),
+                createCollapseAnimator(fabAction4, offset4),
                 createCollapseLateralAnimator(text1, textset1),
-                createCollapseLateralAnimator(text2, textset2),
-                createCollapseLateralAnimator(text3, textset3));
+                createCollapseLateralAnimator(text2_1, textset2),
+                createCollapseLateralAnimator(text3, textset3),
+                createCollapseLateralAnimator(text4, textset4));
         animatorSet.start();
         animateFab();
         Runnable clickButton = new Runnable() {
             @Override
             public void run() {
                 text1.setVisibility(View.INVISIBLE);
-                text2.setVisibility(View.INVISIBLE);
+                text2_1.setVisibility(View.INVISIBLE);
                 text3.setVisibility(View.INVISIBLE);
+                text4.setVisibility(View.INVISIBLE);
             }
         };
         text1.postDelayed(clickButton, 180);
-        text2.postDelayed(clickButton, 180);
+        text2_1.postDelayed(clickButton, 180);
         text3.postDelayed(clickButton, 180);
+        text4.postDelayed(clickButton, 180);
     }
 
     private void expandFab() {
         if(preenchido){
             text1.setVisibility(View.VISIBLE);
+            text2_1.setVisibility(View.VISIBLE);
+            fabAction3.setVisibility(View.VISIBLE);
         }
-        text2.setVisibility(View.VISIBLE);
         text3.setVisibility(View.VISIBLE);
+        text4.setVisibility(View.VISIBLE);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(createExpandAnimator(fabAction1, offset1),
                 createExpandAnimator(fabAction2, offset2),
                 createExpandAnimator(fabAction3, offset3),
+                createExpandAnimator(fabAction4, offset4),
                 createExpandLateralAnimator(text1, textset1),
-                createExpandLateralAnimator(text2, textset2),
-                createExpandLateralAnimator(text3, textset3));
+                createExpandLateralAnimator(text2_1, textset2),
+                createExpandLateralAnimator(text3, textset3),
+                createExpandLateralAnimator(text4, textset4));
         animatorSet.start();
         animateFab();
     }
 
     private static final String TRANSLATION_Y = "translationY";
-
     private static final String TRANSLATION_X = "translationX";
 
     private Animator createCollapseAnimator(View view, float offset) {
@@ -431,6 +340,158 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         cod_final.edit().putString("cidade", "").apply();
         preenchido = false;
         cod_final.edit().putBoolean("preenchido", preenchido).apply();
+        form_enter = false;
+        cod_final.edit().putBoolean("entrou", form_enter).apply();
+        fabAction4.setVisibility(View.INVISIBLE);
+        text1.setVisibility(View.INVISIBLE);
+        fabAction3.setVisibility(View.INVISIBLE);
+        text2_1.setVisibility(View.INVISIBLE);
+        obra.setMarker(false);
+        adicionado = true;
     }
 
+    private void limpa_var_infoMarker(){
+        cod_final.edit().putString("nome", "").apply();
+        cod_final.edit().putString("data", "").apply();
+        cod_final.edit().putString("rua", "").apply();
+        cod_final.edit().putString("bairro", "").apply();
+        cod_final.edit().putString("cidade", "").apply();
+        preenchido = false;
+        cod_final.edit().putBoolean("preenchido", preenchido).apply();
+        form_enter = false;
+        cod_final.edit().putBoolean("entrou", form_enter).apply();
+        mMap.clear();
+        obra.setMarker(false);
+        fabAction4.setVisibility(View.INVISIBLE);
+        text1.setVisibility(View.INVISIBLE);
+        fabAction3.setVisibility(View.INVISIBLE);
+        text2_1.setVisibility(View.INVISIBLE);
+        DrawnMarkers(mMap);
+    }
+
+    private void inic_variables(){
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        cod_final = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        preenchido = false;
+        db = new ObrasDB(this);
+        fabContainer = (ViewGroup) findViewById(R.id.fab_container);
+        fabAction1 = (FloatingActionButton) findViewById(R.id.fab1);
+        fabAction2 = (FloatingActionButton) findViewById(R.id.fab2);
+        fabAction3 = (FloatingActionButton) findViewById(R.id.fab3);
+        fabAction4 = (FloatingActionButton) findViewById(R.id.fab4);
+        text1 = (LinearLayout) findViewById(R.id.text1);
+        text2_1 = (LinearLayout) findViewById(R.id.text2_1);
+        text3 = (LinearLayout) findViewById(R.id.text3);
+        text4 = (LinearLayout) findViewById(R.id.text4);
+        fab_menu = (FloatingActionButton) findViewById(R.id.fab_menu);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void FAB_MENU(){
+        fab_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                expanded = !expanded;
+                if (expanded) {
+                    expandFab();
+                } else {
+                    collapseFab();
+                }
+            }
+        });
+
+        fabAction1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!obra.marker){
+                    mMap.clear();
+                    obra.setMarker(false);
+                    DrawnMarkers(mMap);
+                } else {
+                    toast("Não é possivel fazer update, fazer a inserção da obra adicionada");
+                }
+            }
+        });
+
+        fabAction2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (obra.getMarker() && (!preenchido)) {
+                    Intent intent = new Intent(view.getContext(), FormActivity.class);
+                    startActivity(intent);
+                    adicionado = false;
+                } else if ((!adicionado) && (preenchido)){
+                    Intent intent = new Intent(view.getContext(), FormActivity.class);
+                    startActivity(intent);
+                } else {
+                    toast("Adicione um marcador");
+                }
+            }
+        });
+
+        fabAction3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                limpa_var_infoMarker();
+            }
+        });
+
+        fabAction4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                preenchido = cod_final.getBoolean("preenchido", preenchido);
+                if(preenchido) {
+                    nome_obra = cod_final.getString("nome", "");
+                    data_obra = cod_final.getString("data", "");
+                    rua_obra = cod_final.getString("rua", "");
+                    bairro_obra = cod_final.getString("bairro", "");
+                    cidade_obra = cod_final.getString("cidade", "");
+                    int_ext = cod_final.getString("tipo", "");
+                    item_selecionado = cod_final.getString("fase", "");
+                    String temp_lat, temp_lng;
+                    temp_lat = String.valueOf(lat);
+                    temp_lng = String.valueOf(lng);
+                    obra.setObraOnClick(nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra, int_ext, item_selecionado, temp_lat, temp_lng);
+                    db.save(obra);
+                    limpa_var();
+                } else {
+                    toast("Informações não foram adicionadas");
+                }
+            }
+        });
+
+        fabContainer.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                fabContainer.getViewTreeObserver().removeOnPreDrawListener(this);
+                offset1 = fab_menu.getY() - fabAction1.getY();
+                fabAction1.setTranslationY(offset1);
+                offset2 = fab_menu.getY() - fabAction2.getY();
+                fabAction2.setTranslationY(offset2);
+                offset3 = fab_menu.getY() - fabAction3.getY();
+                fabAction3.setTranslationY(offset3);
+                offset4 = fab_menu.getY() - fabAction4.getY();
+                fabAction4.setTranslationY(offset3);
+
+                textset1 = fabAction1.getX() - text1.getX();
+                text1.setTranslationX(textset1);
+                textset2 = fabAction2.getX() - text2_1.getX();
+                text2_1.setTranslationX(textset2);
+                textset3 = fabAction3.getX() - text3.getX();
+                text3.setTranslationX(textset2);
+                textset4 = fabAction4.getX() - text4.getX();
+                text4.setTranslationX(textset4);
+                return true;
+            }
+        });
+    }
 }

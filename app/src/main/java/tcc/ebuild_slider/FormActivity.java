@@ -24,15 +24,15 @@ import java.util.Calendar;
 
 public class FormActivity extends AppCompatActivity {
 
-    private static final int INTERNO = 2131558560;
-    private static final int EXTERNO = 2131558561;
+    private static final String INTERNO = "Interna";
+    private static final String EXTERNO = "Externa";
     private static final String[] interno =  new String[] {"Verificar a necessidade","Elaboração dos estudos técnicos preliminares","Licença ambiental prévia","Elaboração do projeto básico","Elaboração do projeto executivo"};
     private static final String[] externo = new String[] {"Publicação do edital","Licitação","Contrataçao e designação do fiscal da obra","Pagamento seguindo o cronograma físico-financeiro e ordem cronológica","Recebimento da obra","Devolução de garantia","Registros finais"};
     EditText nome, rua, bairro, cidade;
     TextView data;
     Button salvar, cancelar, Bdata;
     String nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
-    boolean preenchido = false;
+    boolean preenchido = false, form_enter = false;
     RadioButton int_ext;
     RadioGroup GrupoRadio;
     String item_selecionado;
@@ -79,11 +79,11 @@ public class FormActivity extends AppCompatActivity {
                 int selectedId = GrupoRadio.getCheckedRadioButtonId();
                 int_ext = (RadioButton) findViewById(selectedId);
                 if ((int_ext = (RadioButton) findViewById(selectedId)) != null) {
-                    if (selectedId == INTERNO) {
+                    if (int_ext.getText().equals(INTERNO)) {
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_list_item_1, interno);
                         lista.setAdapter(adapter);
                     }
-                    if (selectedId == EXTERNO) {
+                    if (int_ext.getText().equals(EXTERNO)) {
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_list_item_1, externo);
                         lista.setAdapter(adapter);
                     }
@@ -124,6 +124,8 @@ public class FormActivity extends AppCompatActivity {
                     cod_final.edit().putString("fase", item_selecionado).apply();
                     preenchido = true;
                     cod_final.edit().putBoolean("preenchido", preenchido).apply();
+                    form_enter = true;
+                    cod_final.edit().putBoolean("entrou", form_enter).apply();
                     finish();
                 } else {
                     toast("Preencha corretamente o formulário");
@@ -137,6 +139,8 @@ public class FormActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cod_final.edit().putBoolean("preenchido", preenchido).apply();
+                form_enter = true;
+                cod_final.edit().putBoolean("entrou", form_enter).apply();
                 finish();
             }
         });

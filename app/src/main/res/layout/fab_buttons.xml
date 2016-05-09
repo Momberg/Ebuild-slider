@@ -8,14 +8,26 @@
     android:clipChildren="false">
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab3"
+        android:id="@+id/fab4"
         app:fabSize="mini"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_input_add"
-        android:layout_above="@+id/fab2"
+        android:layout_above="@+id/fab3"
         android:layout_alignStart="@+id/fab_menu"
         android:layout_marginStart="9dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab3"
+        android:visibility="invisible"
+        app:fabSize="mini"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:layout_above="@+id/fab2"
+        android:layout_alignStart="@+id/fab_menu"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="5dp"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab2"
@@ -57,8 +69,8 @@
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/fab3"
-        android:layout_alignTop="@+id/fab3"
+        android:layout_toStartOf="@+id/fab4"
+        android:layout_alignTop="@+id/fab4"
         android:layout_marginTop="10dp">
 
         <TextView
@@ -71,7 +83,26 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/text2"
+        android:id="@+id/text2_1"
+        android:visibility="invisible"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/fab3"
+        android:layout_alignTop="@+id/fab3"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold"
+            android:text="@string/cancelar"
+            android:id="@+id/textView11" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/text3"
         android:visibility="invisible"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
@@ -90,7 +121,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/text3"
+        android:id="@+id/text4"
         android:visibility="invisible"
         android:orientation="horizontal"
         android:layout_width="wrap_content"

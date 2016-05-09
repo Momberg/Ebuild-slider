@@ -25,8 +25,8 @@ import java.util.List;
 
 public class EditarActivity extends AppCompatActivity {
 
-    private static final int INTERNO = 2131558560;
-    private static final int EXTERNO = 2131558561;
+    private static final String INTERNO = "Interna";
+    private static final String EXTERNO = "Externa";
     private static final String[] interno =  new String[] {"Verificar a necessidade","Elaboração dos estudos técnicos preliminares","Licença ambiental prévia","Elaboração do projeto básico","Elaboração do projeto executivo"};
     private static final String[] externo = new String[] {"Publicação do edital","Licitação","Contrataçao e designação do fiscal da obra","Pagamento seguindo o cronograma físico-financeiro e ordem cronológica","Recebimento da obra","Devolução de garantia","Registros finais"};
     EditText nome, rua, bairro, cidade;
@@ -89,11 +89,11 @@ public class EditarActivity extends AppCompatActivity {
                 int selectedId = GrupoRadio.getCheckedRadioButtonId();
                 int_ext = (RadioButton) findViewById(selectedId);
                 if ((int_ext = (RadioButton) findViewById(selectedId)) != null) {
-                    if (selectedId == INTERNO) {
+                    if (int_ext.getText().equals(INTERNO)) {
                         adapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_list_item_1, interno);
                         lista.setAdapter(adapter);
                     }
-                    if (selectedId == EXTERNO) {
+                    if (int_ext.getText().equals(EXTERNO)) {
                         adapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_list_item_1, externo);
                         lista.setAdapter(adapter);
                     }
