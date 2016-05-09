@@ -26,7 +26,7 @@ public class ListActivity extends AppCompatActivity {
     ObraService service = new ObraService();
     ObraAdapter adapter;
     SharedPreferences cod_obra, edit;
-    String nome_busca, search;
+    String nome_busca;
     boolean editado = false, busca_done = false;
     Button Bsearch, remove_obra, edita_obra;
     EditText busca;
