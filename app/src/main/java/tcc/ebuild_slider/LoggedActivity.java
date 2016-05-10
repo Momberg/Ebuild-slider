@@ -88,7 +88,6 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     lng = point.longitude;
                     obra.setMarker(true);
                     fabAction3.setVisibility(View.VISIBLE);
-                    text2_1.setVisibility(View.VISIBLE);
                 } else {
                     toast("Adicione apenas um marcador por vez");
                 }
@@ -262,6 +261,9 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
     private void expandFab() {
         if(preenchido){
             text1.setVisibility(View.VISIBLE);
+            text2_1.setVisibility(View.VISIBLE);
+            fabAction3.setVisibility(View.VISIBLE);
+        } else if(obra.getMarker()) {
             text2_1.setVisibility(View.VISIBLE);
             fabAction3.setVisibility(View.VISIBLE);
         }
