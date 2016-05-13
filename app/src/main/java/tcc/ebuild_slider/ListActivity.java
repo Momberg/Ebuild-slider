@@ -172,7 +172,7 @@ public class ListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
-            case R.id.search_dialog:
+            case R.id.search_name:
                 busca_done = true;
                 search_box_call();
                 return true;

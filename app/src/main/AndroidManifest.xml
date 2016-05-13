@@ -51,8 +51,8 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".FormActivity" />
-        <activity android:name=".ListActivity" />
-        <activity android:name=".EditarActivity"></activity>
+        <activity android:name=".ListActivity"/>
+        <activity android:name=".EditarActivity"/>
     </application>
 
 </manifest>

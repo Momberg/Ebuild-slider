@@ -96,9 +96,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
-                DrawnMarkers(mMap);
-                toast("Marcadores carregados");
-                map_ready = true;
+                load_obras_onMap();
             }
         });
 
@@ -293,8 +291,9 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
-    public void DrawnMarkers(GoogleMap googleMap){
+    private boolean DrawnMarkers(GoogleMap googleMap){
         String lat, lng;
+        boolean result = false;
         try {
             List<Obra> obras = service.getObrasAll(this);
             for(Obra obra:obras){
@@ -305,11 +304,12 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 longitude = Double.valueOf(lng);
                 LatLng point = new LatLng(latitude, longitude);
                 googleMap.addMarker(new MarkerOptions().position(point).draggable(false));
+                result = !(obra.getLat() == null && obra.getLng() == null);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return  result;
     }
 
     private void toast(String text){
@@ -507,4 +507,17 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
             toast("Information not found");
         }
     }
+
+    public void load_obras_onMap(){
+        Boolean isMarkers;
+        isMarkers = DrawnMarkers(mMap);
+        if(isMarkers){
+            DrawnMarkers(mMap);
+            toast("Obras carregadas");
+        } else {
+            DrawnMarkers(mMap);
+        }
+        map_ready = true;
+    }
+
 }
