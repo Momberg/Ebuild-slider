@@ -87,10 +87,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     lat = point.latitude;
                     lng = point.longitude;
                     obra.setMarker(true);
-                    fabAction3.setVisibility(View.VISIBLE);
-                    if(expanded) {
-                        text2_1.setVisibility(View.VISIBLE);
-                    }
+                    drawn_FABButton_cancel();
                 } else {
                     toast("Adicione apenas um marcador por vez");
                 }
@@ -117,26 +114,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                     public View getInfoContents(Marker marker) {
                         info_adapter = true;
                         View v = getLayoutInflater().inflate(R.layout.info_marker, null);
-                        TextView nome_obra = (TextView) v.findViewById(R.id.nome_obra);
-                        TextView endereco_obra = (TextView) v.findViewById(R.id.endereco_obra);
-                        TextView data_obra = (TextView) v.findViewById(R.id.data_obra);
-                        TextView fase_obra = (TextView) v.findViewById(R.id.fase_obra);
-                        TextView item_fase_obra = (TextView) v.findViewById(R.id.faseitem_obra);
-                        LatLng markerPosition = marker.getPosition();
-                        List<Obra> obras;
-                        obras = service.getObrasLatLng(getApplicationContext(), markerPosition.latitude, markerPosition.longitude);
-                        if(obras.size() > 0){
-                            o = obras.get(0);
-                            nome_obra.setText(o.getNome());
-                            String endereco;
-                            endereco = o.getRua() + ", " + o.getBairro() + " - " + o.getCidade();
-                            endereco_obra.setText(endereco);
-                            data_obra.setText(o.getData());
-                            fase_obra.setText(o.getTipoFase());
-                            item_fase_obra.setText(o.getFase());
-                        } else {
-                            toast("Information not found");
-                        }
+                        info_marker(v, marker);
                         return v;
                     }
                 });
@@ -328,6 +306,7 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 LatLng point = new LatLng(latitude, longitude);
                 googleMap.addMarker(new MarkerOptions().position(point).draggable(false));
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -498,5 +477,34 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 return true;
             }
         });
+    }
+
+    private void drawn_FABButton_cancel(){
+        fabAction3.setVisibility(View.VISIBLE);
+        if(expanded) {
+            text2_1.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void info_marker(View v, Marker marker){
+        TextView nome_obra = (TextView) v.findViewById(R.id.nome_obra);
+        TextView endereco_obra = (TextView) v.findViewById(R.id.endereco_obra);
+        TextView data_obra = (TextView) v.findViewById(R.id.data_obra);
+        TextView fase_obra = (TextView) v.findViewById(R.id.fase_obra);
+        TextView item_fase_obra = (TextView) v.findViewById(R.id.faseitem_obra);
+        LatLng markerPosition = marker.getPosition();
+        List<Obra> obras = service.getObrasLatLng(getApplicationContext(), markerPosition.latitude, markerPosition.longitude);
+        if(obras.size() > 0){
+            o = obras.get(0);
+            nome_obra.setText(o.getNome());
+            String endereco;
+            endereco = o.getRua() + ", " + o.getBairro() + " - " + o.getCidade();
+            endereco_obra.setText(endereco);
+            data_obra.setText(o.getData());
+            fase_obra.setText(o.getTipoFase());
+            item_fase_obra.setText(o.getFase());
+        } else {
+            toast("Information not found");
+        }
     }
 }
