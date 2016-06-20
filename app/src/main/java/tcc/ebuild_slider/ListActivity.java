@@ -28,7 +28,6 @@ public class ListActivity extends AppCompatActivity {
     ObraService service = new ObraService();
     ObraAdapter adapter;
     SharedPreferences cod_obra, edit;
-    String nome_busca;
     boolean editado = false, busca_done = false;
     Button remove_obra, edita_obra;
     SearchView searchView;
@@ -54,10 +53,6 @@ public class ListActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            adapter = new ObraAdapter(getApplicationContext(), obras);
-            lista.setAdapter(adapter);
-        } else {
-            obras = service.searchObrasName(getApplicationContext(), nome_busca);
             adapter = new ObraAdapter(getApplicationContext(), obras);
             lista.setAdapter(adapter);
         }
@@ -149,6 +144,9 @@ public class ListActivity extends AppCompatActivity {
                 adapter = new ObraAdapter(getApplicationContext(), obras);
                 lista.setAdapter(adapter);
                 busca_done = true;
+                if(searchView.getQuery().toString().trim().equals("")){
+                    update_list();
+                }
                 return true;
             }
         });
