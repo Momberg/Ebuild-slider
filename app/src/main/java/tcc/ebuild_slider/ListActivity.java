@@ -3,8 +3,10 @@ package tcc.ebuild_slider;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +31,7 @@ public class ListActivity extends AppCompatActivity {
     String nome_busca;
     boolean editado = false, busca_done = false;
     Button remove_obra, edita_obra;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,25 +125,48 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (busca_done) {
-            try {
-                obras = service.getObrasAll(this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            adapter = new ObraAdapter(this, obras);
-            lista.setAdapter(adapter);
-            busca_done = false;
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        super.onCreateOptionsMenu(menu);
-        MenuInflater mi = getMenuInflater();
-        mi.inflate(R.menu.search_menu, menu);
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.search_name);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint("Busca");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                busca_done = true;
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String searchQuery) {
+                obras = service.searchObrasName(getApplicationContext(), searchView.getQuery().toString().trim());
+                adapter = new ObraAdapter(getApplicationContext(), obras);
+                lista.setAdapter(adapter);
+                busca_done = true;
+                return true;
+            }
+        });
+
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // Do something when collapsed
+                return true;  // Return true to collapse action view
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                // Do something when expanded
+                return true;  // Return true to expand action view
+            }
+        });
+
         return true;
     }
 
