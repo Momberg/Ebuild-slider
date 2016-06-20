@@ -48,6 +48,4 @@
 
     </LinearLayout>
 
-    <include layout="@layout/search_box"/>
-
 </RelativeLayout>

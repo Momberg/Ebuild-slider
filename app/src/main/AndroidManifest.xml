@@ -53,6 +53,7 @@
         <activity android:name=".FormActivity" />
         <activity android:name=".ListActivity"/>
         <activity android:name=".EditarActivity"/>
+        <activity android:name=".DialogCall"/>
     </application>
 
 </manifest>

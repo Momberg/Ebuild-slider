@@ -28,9 +28,7 @@ public class ListActivity extends AppCompatActivity {
     SharedPreferences cod_obra, edit;
     String nome_busca;
     boolean editado = false, busca_done = false;
-    Button Bsearch, remove_obra, edita_obra;
-    EditText busca;
-    LinearLayout box_s, box_act_list;
+    Button remove_obra, edita_obra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,28 +101,6 @@ public class ListActivity extends AppCompatActivity {
                 }
             }
         });
-
-        Bsearch = (Button) findViewById(R.id.busca_btn);
-        Bsearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nome_busca = busca.getText().toString();
-                if(!nome_busca.equals("")) {
-                    obras = service.searchObrasName(getApplicationContext(), nome_busca);
-                    adapter = new ObraAdapter(getApplicationContext(), obras);
-                    lista.setAdapter(adapter);
-                    search_box_dismiss();
-                    busca_done = true;
-                } else {
-                    search_box_dismiss();
-                    busca_done = false;
-                }
-            }
-        });
-        busca = (EditText) findViewById(R.id.busca_text);
-
-        box_s = (LinearLayout) findViewById(R.id.box_search);
-        box_act_list = (LinearLayout) findViewById(R.id.box_btn_act_list);
     }
 
     private void listadeObras(){
@@ -154,7 +130,6 @@ public class ListActivity extends AppCompatActivity {
             }
             adapter = new ObraAdapter(this, obras);
             lista.setAdapter(adapter);
-            search_box_dismiss();
             busca_done = false;
         } else {
             super.onBackPressed();
@@ -174,17 +149,8 @@ public class ListActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.search_name:
                 busca_done = true;
-                search_box_call();
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void search_box_call(){
-        box_s.setVisibility(View.VISIBLE);
-    }
-
-    private void search_box_dismiss(){
-        box_s.setVisibility(View.INVISIBLE);
     }
 }
