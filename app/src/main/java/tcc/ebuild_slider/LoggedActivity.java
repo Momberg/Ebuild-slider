@@ -222,19 +222,10 @@ public class LoggedActivity extends AppCompatActivity implements NavigationView.
                 createCollapseLateralAnimator(text4, textset4));
         animatorSet.start();
         animateFab();
-        Runnable clickButton = new Runnable() {
-            @Override
-            public void run() {
-                text1.setVisibility(View.INVISIBLE);
-                text2_1.setVisibility(View.INVISIBLE);
-                text3.setVisibility(View.INVISIBLE);
-                text4.setVisibility(View.INVISIBLE);
-            }
-        };
-        text1.postDelayed(clickButton, 180);
-        text2_1.postDelayed(clickButton, 180);
-        text3.postDelayed(clickButton, 180);
-        text4.postDelayed(clickButton, 180);
+        text1.setVisibility(View.INVISIBLE);
+        text2_1.setVisibility(View.INVISIBLE);
+        text3.setVisibility(View.INVISIBLE);
+        text4.setVisibility(View.INVISIBLE);
     }
 
     private void expandFab() {

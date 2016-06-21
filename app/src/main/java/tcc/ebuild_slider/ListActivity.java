@@ -8,13 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import java.io.IOException;
@@ -28,7 +25,7 @@ public class ListActivity extends AppCompatActivity {
     ObraService service = new ObraService();
     ObraAdapter adapter;
     SharedPreferences cod_obra, edit;
-    boolean editado = false, busca_done = false;
+    boolean editado = false;
     Button remove_obra, edita_obra;
     SearchView searchView;
 
@@ -47,15 +44,13 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void update_list(){
-        if(!busca_done){
-            try {
-                obras = service.getObrasAll(getApplicationContext());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            adapter = new ObraAdapter(getApplicationContext(), obras);
-            lista.setAdapter(adapter);
+        try {
+            obras = service.getObrasAll(getApplicationContext());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        adapter = new ObraAdapter(getApplicationContext(), obras);
+        lista.setAdapter(adapter);
     }
 
     @Override
@@ -79,6 +74,7 @@ public class ListActivity extends AppCompatActivity {
                     ObrasDB db = new ObrasDB(getApplicationContext());
                     db.delete(ID_Lista);
                     update_list();
+                    searchView.setQuery("",true);
                     ID_Lista = -1;
                 } else {
                     toast("Selecione alguma obra");
@@ -134,7 +130,6 @@ public class ListActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                busca_done = true;
                 return false;
             }
 
@@ -143,7 +138,6 @@ public class ListActivity extends AppCompatActivity {
                 obras = service.searchObrasName(getApplicationContext(), searchView.getQuery().toString().trim());
                 adapter = new ObraAdapter(getApplicationContext(), obras);
                 lista.setAdapter(adapter);
-                busca_done = true;
                 if(searchView.getQuery().toString().trim().equals("")){
                     update_list();
                 }
@@ -154,14 +148,12 @@ public class ListActivity extends AppCompatActivity {
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                // Do something when collapsed
-                return true;  // Return true to collapse action view
+                return true;
             }
 
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                // Do something when expanded
-                return true;  // Return true to expand action view
+                return true;
             }
         });
 
@@ -172,7 +164,6 @@ public class ListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.search_name:
-                busca_done = true;
                 return true;
         }
         return super.onOptionsItemSelected(item);
