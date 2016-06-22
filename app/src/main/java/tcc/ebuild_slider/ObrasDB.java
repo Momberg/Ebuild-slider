@@ -69,7 +69,11 @@ public class ObrasDB extends SQLiteOpenHelper {
     public List<Obra> searchObraByName(String name){
         SQLiteDatabase db = getReadableDatabase();
         try{
-            Cursor c = db.query("obras", null, "nome LIKE '" + name + "%' or rua LIKE '" + name + "%'", null, null, null, null);
+            Cursor c = db.query("obras", null, "nome LIKE '" + name + "%' " +
+                    "or rua LIKE '" + name + "%' " +
+                    "or bairro LIKE '" + name + "%' " +
+                    "or cidade LIKE '" + name + "%' "
+                    , null, null, null, null);
             return  toList(c);
         } finally {
             db.close();
