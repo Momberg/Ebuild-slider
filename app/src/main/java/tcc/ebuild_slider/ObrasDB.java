@@ -13,6 +13,8 @@ public class ObrasDB extends SQLiteOpenHelper {
     private static final int VERSAO_BANCO = 3;
     public static final String NOME_BANCO = "obras.sqlite";
 
+    private static final String[] typ_str = new String[] {"avenida", "av.", "av", "rua", "alameda", "al.", "al", "estrada", "estr.", "estr"};
+
     public ObrasDB(Context context) {
         super(context, NOME_BANCO, null, VERSAO_BANCO);
     }

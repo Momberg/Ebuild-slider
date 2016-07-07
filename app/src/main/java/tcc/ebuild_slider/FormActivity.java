@@ -2,7 +2,6 @@ package tcc.ebuild_slider;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,13 +24,14 @@ public class FormActivity extends AppCompatActivity {
 
     private static final String INTERNO = "Interna";
     private static final String EXTERNO = "Externa";
+    private static final String[] typ_str = new String[] {"avenida", "av.", "av", "rua", "alameda", "al.", "al", "estrada", "estr.", "estr"};
     private static final String[] interno =  new String[] {"Verificar a necessidade","Elaboração dos estudos técnicos preliminares","Licença ambiental prévia","Elaboração do projeto básico","Elaboração do projeto executivo"};
     private static final String[] externo = new String[] {"Publicação do edital","Licitação","Contrataçao e designação do fiscal da obra","Pagamento seguindo o cronograma físico-financeiro e ordem cronológica","Recebimento da obra","Devolução de garantia","Registros finais"};
     EditText nome, rua, bairro, cidade;
     TextView data;
     Button salvar, cancelar, Bdata;
     String nome_obra, data_obra, rua_obra, bairro_obra, cidade_obra;
-    boolean preenchido = false, form_enter = false;
+    boolean preenchido = false, form_enter = false, tipostr;
     RadioButton int_ext;
     RadioGroup GrupoRadio;
     String item_selecionado;
@@ -54,11 +53,24 @@ public class FormActivity extends AppCompatActivity {
     }
 
     public void salvar(){
+        tipostr = false;
         nome_obra = nome.getText().toString();
         data_obra = data.getText().toString();
-        rua_obra = rua.getText().toString();
         bairro_obra = bairro.getText().toString();
         cidade_obra = cidade.getText().toString();
+        for(String tipos: typ_str){
+            if(rua.getText().toString().substring(0,tipos.length()).equalsIgnoreCase(tipos)){
+                rua_obra = rua.getText().toString();
+                tipostr = true;
+            }
+        }
+        if(!tipostr){
+            for(String tipos: typ_str){
+                if(!rua.getText().toString().substring(0,tipos.length()).equalsIgnoreCase(tipos)){
+                    tipostr = false;
+                }
+            }
+        }
     }
 
     public void fases(){
@@ -114,22 +126,27 @@ public class FormActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 salvar();
-                if(item == 1 && !nome_obra.equals("") && !data_obra.equals("") && !rua_obra.equals("") && !bairro_obra.equals("") && !cidade_obra.equals("")){
-                    cod_final.edit().putString("nome", nome_obra).apply();
-                    cod_final.edit().putString("data", data_obra).apply();
-                    cod_final.edit().putString("rua", rua_obra).apply();
-                    cod_final.edit().putString("bairro", bairro_obra).apply();
-                    cod_final.edit().putString("cidade", cidade_obra).apply();
-                    cod_final.edit().putString("tipo", int_ext.getText().toString()).apply();
-                    cod_final.edit().putString("fase", item_selecionado).apply();
-                    preenchido = true;
-                    cod_final.edit().putBoolean("preenchido", preenchido).apply();
-                    form_enter = true;
-                    cod_final.edit().putBoolean("entrou", form_enter).apply();
-                    finish();
+                if(tipostr){
+                    if(item == 1 && !nome_obra.equals("") && !data_obra.equals("") && !rua_obra.equals("") && !bairro_obra.equals("") && !cidade_obra.equals("")){
+                        cod_final.edit().putString("nome", nome_obra).apply();
+                        cod_final.edit().putString("data", data_obra).apply();
+                        cod_final.edit().putString("rua", rua_obra).apply();
+                        cod_final.edit().putString("bairro", bairro_obra).apply();
+                        cod_final.edit().putString("cidade", cidade_obra).apply();
+                        cod_final.edit().putString("tipo", int_ext.getText().toString()).apply();
+                        cod_final.edit().putString("fase", item_selecionado).apply();
+                        preenchido = true;
+                        cod_final.edit().putBoolean("preenchido", preenchido).apply();
+                        form_enter = true;
+                        cod_final.edit().putBoolean("entrou", form_enter).apply();
+                        finish();
+                    } else {
+                        toast("Preencha corretamente o formulário");
+                    }
                 } else {
-                    toast("Preencha corretamente o formulário");
+                    toast("O endereço é uma rua, avenida... ?");
                 }
+
 
             }
         });
