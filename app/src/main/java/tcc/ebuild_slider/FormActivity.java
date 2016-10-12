@@ -59,9 +59,11 @@ public class FormActivity extends AppCompatActivity {
         bairro_obra = bairro.getText().toString();
         cidade_obra = cidade.getText().toString();
         for(String tipos: typ_str){
-            if(rua.getText().toString().substring(0,tipos.length()).equalsIgnoreCase(tipos)){
-                rua_obra = rua.getText().toString();
-                tipostr = true;
+            if(tipos.length() < rua.length()){
+                if(rua.getText().toString().substring(0,tipos.length()).equalsIgnoreCase(tipos)){
+                    rua_obra = rua.getText().toString();
+                    tipostr = true;
+                }
             }
         }
         if(!tipostr){
