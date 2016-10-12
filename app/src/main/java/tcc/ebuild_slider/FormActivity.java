@@ -24,7 +24,6 @@ public class FormActivity extends AppCompatActivity {
 
     private static final String INTERNO = "Interna";
     private static final String EXTERNO = "Externa";
-    private static final String[] typ_str = new String[] {"avenida", "av.", "av", "rua", "alameda", "al.", "al", "estrada", "estr.", "estr"};
     private static final String[] interno =  new String[] {"Verificar a necessidade","Elaboração dos estudos técnicos preliminares","Licença ambiental prévia","Elaboração do projeto básico","Elaboração do projeto executivo"};
     private static final String[] externo = new String[] {"Publicação do edital","Licitação","Contrataçao e designação do fiscal da obra","Pagamento seguindo o cronograma físico-financeiro e ordem cronológica","Recebimento da obra","Devolução de garantia","Registros finais"};
     EditText nome, rua, bairro, cidade;
@@ -58,21 +57,7 @@ public class FormActivity extends AppCompatActivity {
         data_obra = data.getText().toString();
         bairro_obra = bairro.getText().toString();
         cidade_obra = cidade.getText().toString();
-        for(String tipos: typ_str){
-            if(tipos.length() < rua.length()){
-                if(rua.getText().toString().substring(0,tipos.length()).equalsIgnoreCase(tipos)){
-                    rua_obra = rua.getText().toString();
-                    tipostr = true;
-                }
-            }
-        }
-        if(!tipostr){
-            for(String tipos: typ_str){
-                if(!rua.getText().toString().substring(0,tipos.length()).equalsIgnoreCase(tipos)){
-                    tipostr = false;
-                }
-            }
-        }
+        rua_obra = rua.getText().toString();
     }
 
     public void fases(){
