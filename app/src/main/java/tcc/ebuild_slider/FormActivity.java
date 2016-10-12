@@ -113,27 +113,22 @@ public class FormActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 salvar();
-                if(tipostr){
-                    if(item == 1 && !nome_obra.equals("") && !data_obra.equals("") && !rua_obra.equals("") && !bairro_obra.equals("") && !cidade_obra.equals("")){
-                        cod_final.edit().putString("nome", nome_obra).apply();
-                        cod_final.edit().putString("data", data_obra).apply();
-                        cod_final.edit().putString("rua", rua_obra).apply();
-                        cod_final.edit().putString("bairro", bairro_obra).apply();
-                        cod_final.edit().putString("cidade", cidade_obra).apply();
-                        cod_final.edit().putString("tipo", int_ext.getText().toString()).apply();
-                        cod_final.edit().putString("fase", item_selecionado).apply();
-                        preenchido = true;
-                        cod_final.edit().putBoolean("preenchido", preenchido).apply();
-                        form_enter = true;
-                        cod_final.edit().putBoolean("entrou", form_enter).apply();
-                        finish();
-                    } else {
-                        toast("Preencha corretamente o formulário");
-                    }
+                if(item == 1 && !nome_obra.equals("") && !data_obra.equals("") && !rua_obra.equals("") && !bairro_obra.equals("") && !cidade_obra.equals("")){
+                    cod_final.edit().putString("nome", nome_obra).apply();
+                    cod_final.edit().putString("data", data_obra).apply();
+                    cod_final.edit().putString("rua", rua_obra).apply();
+                    cod_final.edit().putString("bairro", bairro_obra).apply();
+                    cod_final.edit().putString("cidade", cidade_obra).apply();
+                    cod_final.edit().putString("tipo", int_ext.getText().toString()).apply();
+                    cod_final.edit().putString("fase", item_selecionado).apply();
+                    preenchido = true;
+                    cod_final.edit().putBoolean("preenchido", preenchido).apply();
+                    form_enter = true;
+                    cod_final.edit().putBoolean("entrou", form_enter).apply();
+                    finish();
                 } else {
-                    toast("O endereço é uma rua, avenida... ?");
+                    toast("Preencha corretamente o formulário");
                 }
-
 
             }
         });
